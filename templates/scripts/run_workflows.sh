@@ -96,6 +96,11 @@ fi
 tmp="$(output_json_format "${params1[@]}")$(output_json_format "${params2[@]}")$(output_json_format "${params3[@]}")"
 echo "{${tmp:0:${#tmp}-2}}" > metadata.json
 
+
+# Andrew: This is more descriptive than the default turbine-output symbolic link
+export TURBINE_OUTPUT_SOFTLINK="last-exp"
+
+
 # If we want to run the wrapper using CANDLE...
 if [ "${USE_CANDLE:-1}" -eq 1 ]; then
     "$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a      "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$WORKFLOW_SETTINGS_FILE" "$MODEL_NAME"
