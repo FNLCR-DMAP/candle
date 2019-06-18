@@ -28,7 +28,7 @@ params3=(CPUS_PER_TASK MEM_PER_NODE PPN)
 export DEFAULT_PYTHON_MODULE="$MODULES_FOR_BUILD"
 
 # These are constants referring to the CANDLE-compliant wrapper Python script
-export MODEL_PYTHON_DIR="$CANDLE/Supervisor/templates/scripts"
+export MODEL_PYTHON_DIR="$CANDLE_WRAPPER/templates/scripts"
 export MODEL_PYTHON_SCRIPT="candle_compliant_wrapper"
 
 # Set a proportional number of processors to use on the node
@@ -70,7 +70,7 @@ if [ "x$WORKFLOW_TYPE" == "xupf" ]; then
 
         # Create the new restart UPF
         upf_new="upf-restart.txt"
-        python $CANDLE/Supervisor/templates/scripts/restart.py $metadata_file > $upf_new
+        python $CANDLE_WRAPPER/templates/scripts/restart.py $metadata_file > $upf_new
 
         # If the new UPF is empty, then there's nothing to do, so quit
         if [ -s $upf_new ]; then # if it's NOT empty...
@@ -103,14 +103,14 @@ export TURBINE_OUTPUT_SOFTLINK="last-exp"
 
 # If we want to run the wrapper using CANDLE...
 if [ "${USE_CANDLE:-1}" -eq 1 ]; then
-    "$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a      "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$WORKFLOW_SETTINGS_FILE" "$MODEL_NAME"
-    # if [ "x$WORKFLOW_TYPE" == "xupf" ]; then
-    #     #$EMEWS_PROJECT_ROOT/swift/workflow.sh                           $SITE  -a       $CFG_SYS                                                  $THIS/upf-1.txt
-    #     "$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a      "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$WORKFLOW_SETTINGS_FILE"
-    # elif [ "x$WORKFLOW_TYPE" == "xmlrMBO" ]; then
-    #     #$EMEWS_PROJECT_ROOT/swift/workflow.sh                           $SITE  $RUN_DIR $CFG_SYS                                                 $CFG_PRM                   $MODEL_NAME
-    #     "$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a      "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$WORKFLOW_SETTINGS_FILE" "$MODEL_NAME"
-    # fi
+    #"$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a      "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$WORKFLOW_SETTINGS_FILE" "$MODEL_NAME"
+    if [ "x$WORKFLOW_TYPE" == "xupf" ]; then
+        #$EMEWS_PROJECT_ROOT/swift/workflow.sh                           $SITE  -a       $CFG_SYS                                                  $THIS/upf-1.txt
+        "$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a      "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$WORKFLOW_SETTINGS_FILE"
+    elif [ "x$WORKFLOW_TYPE" == "xmlrMBO" ]; then
+        #$EMEWS_PROJECT_ROOT/swift/workflow.sh                           $SITE  $RUN_DIR $CFG_SYS                                                 $CFG_PRM                   $MODEL_NAME
+        "$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a      "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$WORKFLOW_SETTINGS_FILE" "$MODEL_NAME"
+    fi
 # ...otherwise, run the wrapper alone, outside of CANDLE
 else
     python "$MODEL_PYTHON_DIR/$MODEL_PYTHON_SCRIPT.py"

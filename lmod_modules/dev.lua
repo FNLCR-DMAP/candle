@@ -7,10 +7,13 @@ whatis("Description: Open source software for scalable hyperparameter optimizati
 local app         = "candle"
 local version     = "dev"
 local base = "/data/BIDS-HPC/public/software/distributions/candle/dev"
+local wrappers = "/data/BIDS-HPC/public/software/checkouts/fnlcr-bids-sdsi/candle"
 
 setenv("CANDLE", base) -- used by submit_candle_job.sh, run_without_candle.sh, and copy_candle_template.sh
--- append_path("PATH", pathJoin(base,"scripts")) -- used only in order to find the copy_candle_template script
-append_path("PATH", pathJoin(base,"Supervisor/templates/scripts")) -- used only in order to find the copy_candle_template script
+
+setenv("CANDLE_WRAPPERS", wrappers)
+append_path("PATH", pathJoin(wrappers,"templates/scripts"))
+
 setenv("SITE", "biowulf") -- used by submit_candle_job.sh
 setenv("TURBINE_HOME", pathJoin(base,"builds/swift-t-install/turbine"))
 setenv("MODULES_FOR_BUILD", "python/3.6")

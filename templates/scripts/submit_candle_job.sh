@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define the model and its default settings
-export MODEL_SCRIPT="$CANDLE/Supervisor/templates/models/wrapper_compliant/mnist_mlp.py" # should be wrapper-compliant
-export DEFAULT_PARAMS_FILE="$CANDLE/Supervisor/templates/model_params/mnist1.txt"
+export MODEL_SCRIPT="$CANDLE_WRAPPERS/templates/models/wrapper_compliant/mnist_mlp.py" # should be wrapper-compliant
+export DEFAULT_PARAMS_FILE="$CANDLE_WRAPPERS/templates/model_params/mnist1.txt"
 
 # Define the execution Python to use if you don't want to use the central Python environment on Biowulf (currently python/3.6) (if PYTHON_BIN_PATH is set, it takes precedence over EXEC_PYTHON_MODULE)
 export PYTHON_BIN_PATH=                 # e.g., "$CONDA_PREFIX/envs/<YOUR_CONDA_ENVIRONMENT_NAME>/bin", "/data/BIDS-HPC/public/software/conda/envs/main3.6/bin"
@@ -14,7 +14,7 @@ export SUPP_PYTHONPATH=                 # e.g., "/home/weismanal/data/conda/envs
 
 # Workflow settings
 export WORKFLOW_TYPE="upf"
-export WORKFLOW_SETTINGS_FILE="$CANDLE/Supervisor/templates/workflow_settings/upf3.txt"
+export WORKFLOW_SETTINGS_FILE="$CANDLE_WRAPPERS/templates/workflow_settings/upf3.txt"
 export RESTART_FROM_EXP=
 
 # Job specification
@@ -32,4 +32,4 @@ export USE_CANDLE=1 # if not already set, as in e.g. by run_without_candle.sh, s
 
 
 ################ MODIFY ONLY ABOVE; DO NOT MODIFY BELOW ####################################################################
-$CANDLE/Supervisor/templates/scripts/run_workflows.sh
+$CANDLE_WRAPPERS/templates/scripts/run_workflows.sh
