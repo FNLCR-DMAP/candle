@@ -1,18 +1,18 @@
 #!/bin/bash
 
-#CANDLE=/data/BIDS-HPC/public/candle
-CANDLE=/data/BIDS-HPC/public/software/distributions/candle/2019-05-06
-
 #mympiroot=/usr/local/OpenMPI/3.0.0/gcc-7.2.0-pmi2
 #mympiroot=/usr/local/OpenMPI/3.1.3/gcc-7.4.0-pmi2
 #mympiroot=/usr/local/OpenMPI/3.1.2/CUDA-9.0/gcc-7.3.0-pmi2
-mympiroot=/data/BIDS-HPC/public/software/builds/mpich-3.3-3
+#mympiroot=/data/BIDS-HPC/public/software/builds/mpich-3.3-3
+mympiroot=/usr/local/OpenMPI/3.1.3/CUDA-9.2/gcc-7.3.0-pmi2
 mytclroot=/usr/local/Tcl_Tk/8.6.8/gcc_7.2.0
 myrroot=/usr/local/apps/R/3.5/3.5.0_build2/lib64/R
 myantroot=/usr/local/apps/ant/1.10.3
 mypyroot=/usr/local/Anaconda/envs/py3.6
 export SWIFT_T_SRC_ROOT=$CANDLE/swift-t
-CUSTOM_CONFIGURE_ARGS="--with-launcher=/usr/local/slurm/bin/srun" # NOTE: The line "EXTRA_ARGS=""" in build-turbine.sh must be changed to "EXTRA_ARGS="${CUSTOM_CONFIGURE_ARGS:-}"" in order for this setting to have any effect!
+#CUSTOM_CONFIGURE_ARGS="--with-launcher=/usr/local/slurm/bin/srun" # NOTE: The line "EXTRA_ARGS=""" in build-turbine.sh must be changed to "EXTRA_ARGS="${CUSTOM_CONFIGURE_ARGS:-}"" in order for this setting to have any effect!
+#CUSTOM_CFG_ARGS_TURBINE="--with-launcher=/usr/local/slurm/bin/srun"
+CUSTOM_CFG_ARGS_TURBINE=""
 
 
 # SWIFT/T SETTINGS
@@ -175,6 +175,15 @@ STC_ANT_ARGS=""
 # Make build parallelism: increase to speed up builds
 MAKE_PARALLELISM=1
 
+#+================================+
+#| Configure-time customizations  |
+#+================================+
+
+# These are additional arguments passed directly to the configure
+# scripts for each C module for any settings not captured above:
+CUSTOM_CFG_ARGS_C_UTILS=""
+CUSTOM_CFG_ARGS_LB=""
+
 #+=====================================+
 #|| Optional directory layout control ||
 #+=====================================+
@@ -229,8 +238,8 @@ ENABLE_MKSTATIC_CRC=0
 # module load gcc
 
 # Bebop:
-# module load mvapich2
-#module load gcc/7.1.0-4bgguyp mpich/3.2-bsq4vhr
+# module load mvapich2 # or
+# module load gcc/7.1.0-4bgguyp mpich/3.2-bsq4vhr
 
 # Beagle:
 # module unload PrgEnv-gnu
@@ -241,6 +250,12 @@ ENABLE_MKSTATIC_CRC=0
 # module load deeplearning # If you want Python
 # module swap PrgEnv-pgi PrgEnv-gnu
 # module load java
+
+# Summitdev:
+# module load spectrum-mpi
+
+# Midway:
+
 
 
 #+===================+

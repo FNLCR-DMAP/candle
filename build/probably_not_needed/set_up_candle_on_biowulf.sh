@@ -131,14 +131,14 @@ export ADLB_DEBUG_HOSTMAP=1
 #    # Test MPI
 #    srun -n 1 python $CANDLE/Benchmarks/Pilot1/P1B3/p1b3_baseline_keras2.py
 
-    # (3) Test Swift/T
-    swift-t -n 3 mytest2.swift
-
 if [ 0 -eq 1 ]; then
 
     # (2)
     mpicc hello.c
     srun -n 3 a.out
+
+    # (3) Test Swift/T
+    swift-t -n 3 mytest2.swift
 
     # (4)
     swift-t -n 3 -r $(pwd) myextension.swift

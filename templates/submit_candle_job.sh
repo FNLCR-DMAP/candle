@@ -1,22 +1,18 @@
 #!/bin/bash
 
-# Always load the candle module
-#module load candle # removing this because we should do this on the command line
-
-
 #### MODIFY ONLY BELOW ####################################################################
 # Load desired Python version or Conda environment
 # Load other custom environment settings here
 module load $MODULES_FOR_BUILD
 
 # Model specification
-export MODEL_PYTHON_DIR="$CANDLE/Supervisor/templates/models/mnist"
+export MODEL_PYTHON_DIR="$CANDLE_WRAPPERS/templates/models/mnist"
 export MODEL_PYTHON_SCRIPT="mnist_mlp"
-export DEFAULT_PARAMS_FILE="$CANDLE/Supervisor/templates/model_params/mnist1.txt"
+export DEFAULT_PARAMS_FILE="$CANDLE_WRAPPERS/templates/model_params/mnist1.txt"
 
 # Workflow specification
 export WORKFLOW_TYPE="upf"
-export WORKFLOW_SETTINGS_FILE="$CANDLE/Supervisor/templates/workflow_settings/upf3.txt"
+export WORKFLOW_SETTINGS_FILE="$CANDLE_WRAPPERS/templates/workflow_settings/upf3.txt"
 
 # Job specification
 export EXPERIMENTS="$(pwd)/experiments" # this will contain the job output; ensure this directory exists
@@ -33,4 +29,5 @@ export MEM_PER_NODE="20G"
 
 
 # Call the workflow; DO NOT MODIFY
+export TURBINE_OUTPUT_SOFTLINK="last-exp"
 $CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh $SITE -a $CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh $WORKFLOW_SETTINGS_FILE

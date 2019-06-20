@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# This script is a wrapper that prepares multiple things for use at FNLCR prior to running the workflows.
+# This script is a wrapper that prepares multiple things for use at FNLCR prior to running the workflows
+# It is basically a "hidden settings" file
 
 # Write a function to output the key-value pairs
 output_json_format() {
@@ -9,8 +10,6 @@ output_json_format() {
         echo -n "\"$var\": \"${!var}\", "
     done
 }
-
-export USING_TEMPLATES=1
 
 # These are variables from the module .lua files
 params1=(CANDLE SITE TURBINE_HOME)
@@ -28,7 +27,7 @@ params3=(CPUS_PER_TASK MEM_PER_NODE PPN)
 export DEFAULT_PYTHON_MODULE="$MODULES_FOR_BUILD"
 
 # These are constants referring to the CANDLE-compliant wrapper Python script
-export MODEL_PYTHON_DIR="$CANDLE_WRAPPER/templates/scripts"
+export MODEL_PYTHON_DIR="$CANDLE_WRAPPERS/templates/scripts"
 export MODEL_PYTHON_SCRIPT="candle_compliant_wrapper"
 
 # Set a proportional number of processors to use on the node
@@ -54,6 +53,7 @@ fi
 
 # For running the workflows themselves, load the module with which Swift/T was built
 module load $MODULES_FOR_BUILD
+#export USE_OPENMPI=${USE_OPENMPI:-1} # I recently put this setting in the candle module files, so it's set there always!
 
 # If doing the UPF workflow...
 if [ "x$WORKFLOW_TYPE" == "xupf" ]; then
@@ -70,7 +70,7 @@ if [ "x$WORKFLOW_TYPE" == "xupf" ]; then
 
         # Create the new restart UPF
         upf_new="upf-restart.txt"
-        python $CANDLE_WRAPPER/templates/scripts/restart.py $metadata_file > $upf_new
+        python $CANDLE_WRAPPERS/templates/scripts/restart.py $metadata_file > $upf_new
 
         # If the new UPF is empty, then there's nothing to do, so quit
         if [ -s $upf_new ]; then # if it's NOT empty...
