@@ -141,7 +141,7 @@ elif [ $section -eq 6 ]; then
 
     # Save the final build environment and ensure permissions are correct
     env > $SHARED_DIR/final_build_environment.txt
-    chmod -R o=u-w $CANDLE
+    chmod -R g=u,o=u-w $CANDLE
 
 #7: Test a model on a single node; you can kill it once it seems to be working
 elif [ $section -eq 7 ]; then
