@@ -14,7 +14,7 @@ experiments_dir="experiments"
 ret1=0
 if [ ! -f $submission_script ]; then
     #cp $CANDLE/Supervisor/templates/scripts/$submission_script . && echo "Created $submission_script in the current directory" || ret1=$(error_occurred "Could not create $submission_script in the current directory")
-    cp $CANDLE_WRAPPERS/templates/scripts/$submission_script . && echo "Created $submission_script in the current directory" || ret1=$(error_occurred "Could not create $submission_script in the current directory")
+    cp $CANDLE_WRAPPERS/templates/scripts/submit_candle_job-new.sh $submission_script && echo "Created $submission_script in the current directory" || ret1=$(error_occurred "Could not create $submission_script in the current directory")
 else
     echo "WARNING: Could not create $submission_script, as it already exists"
 fi
