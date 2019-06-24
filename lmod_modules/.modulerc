@@ -1,0 +1,3 @@
+#%Module
+module-version candle/main default
+hide-version candle/dev
