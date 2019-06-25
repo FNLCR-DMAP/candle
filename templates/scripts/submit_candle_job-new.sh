@@ -7,6 +7,7 @@ export DEFAULT_PARAMS_FILE="$CANDLE_WRAPPERS/templates/model_params/mnist1.txt"
 # Define the execution Python to use if you don't want to use the central Python environment on Biowulf (currently python/3.6) (if PYTHON_BIN_PATH is set, it takes precedence over EXEC_PYTHON_MODULE)
 export PYTHON_BIN_PATH=                 # e.g., "$CONDA_PREFIX/envs/<YOUR_CONDA_ENVIRONMENT_NAME>/bin", "/data/BIDS-HPC/public/software/conda/envs/main3.6/bin"
 export EXEC_PYTHON_MODULE=              # e.g., "python/2.7" (if unset [and PYTHON_BIN_PATH is unset], the Python used for model execution is $DEFAULT_PYTHON_MODULE, which is currently python/3.6)
+export EXTRA_SCRIPT_ARGS=               # e.g., "--max-ppsize=100000" if you're using Rscript... these are the command line arguments to Python, Rscript, etc.
 
 # Define the execution environment
 export SUPP_MODULES=                    # e.g., "CUDA/10.0 cuDNN/7.5/CUDA-10.0" (this is necessary for running tensorflow when using a local Conda Python)

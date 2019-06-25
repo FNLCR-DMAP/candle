@@ -1,10 +1,10 @@
 #!/bin/bash
 
-#### MODIFY ONLY BELOW ####################################################################
-# Load desired Python version or Conda environment
-# Load other custom environment settings here
+# Load the build environment; DO NOT MODIFY
 module load $MODULES_FOR_BUILD
 
+
+#### MODIFY ONLY BELOW ####################################################################
 # Model specification
 export MODEL_PYTHON_DIR="$CANDLE_WRAPPERS/templates/models/mnist"
 export MODEL_PYTHON_SCRIPT="mnist_mlp"
@@ -30,4 +30,9 @@ export MEM_PER_NODE="20G"
 
 # Call the workflow; DO NOT MODIFY
 export TURBINE_OUTPUT_SOFTLINK="last-exp"
-$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh $SITE -a $CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh $WORKFLOW_SETTINGS_FILE
+if [ "x$WORKFLOW_TYPE" == "xupf" ]; then
+    "$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a      "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$WORKFLOW_SETTINGS_FILE"
+elif [ "x$WORKFLOW_TYPE" == "xmlrMBO" ]; then
+    export R_FILE="mlrMBO-mbo.R"
+    "$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a      "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$WORKFLOW_SETTINGS_FILE" "$MODEL_NAME"
+fi

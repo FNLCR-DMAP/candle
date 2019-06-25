@@ -70,7 +70,7 @@ if [ "x$WORKFLOW_TYPE" == "xupf" ]; then
 
         # Create the new restart UPF
         upf_new="upf-restart.txt"
-        python $CANDLE_WRAPPERS/templates/scripts/restart.py $metadata_file > $upf_new
+        python $CANDLE_WRAPPERS/analysis/restart.py $metadata_file > $upf_new
 
         # If the new UPF is empty, then there's nothing to do, so quit
         if [ -s $upf_new ]; then # if it's NOT empty...
@@ -96,10 +96,8 @@ fi
 tmp="$(output_json_format "${params1[@]}")$(output_json_format "${params2[@]}")$(output_json_format "${params3[@]}")"
 echo "{${tmp:0:${#tmp}-2}}" > metadata.json
 
-
-# Andrew: This is more descriptive than the default turbine-output symbolic link
+# This is more descriptive than the default turbine-output symbolic link
 export TURBINE_OUTPUT_SOFTLINK="last-exp"
-
 
 # If we want to run the wrapper using CANDLE...
 if [ "${USE_CANDLE:-1}" -eq 1 ]; then

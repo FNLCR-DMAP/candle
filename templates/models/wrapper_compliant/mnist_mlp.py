@@ -1,11 +1,3 @@
-# Run the wrapper_connector script, which (1) appends $SUPP_PYTHONPATH to the Python environment if it's defined and (2) defines the function for loading the hyperparameters
-import sys, os
-sys.path.append(os.getenv("CANDLE")+'/Supervisor/templates/scripts')
-import wrapper_connector
-gParameters = wrapper_connector.load_params('params.json')
-################ ADD MODEL BELOW USING gParameters DICTIONARY AS CURRENT HYPERPARAMETER SET; DO NOT MODIFY ABOVE #######################################
-
-
 ##########################################
 # Your DL start here. See mnist_mlp.py   #
 ##########################################
@@ -22,12 +14,12 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.optimizers import RMSprop
 
-batch_size = gParameters['batch_size']
+batch_size = hyperparams['batch_size']
 num_classes = 10
-epochs = gParameters['epochs']
+epochs = hyperparams['epochs']
 
-activation = gParameters['activation']
-optimizer = gParameters['optimizer']
+activation = hyperparams['activation']
+optimizer = hyperparams['optimizer']
 
 # the data, split between train and test sets
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -69,17 +61,3 @@ print('Test accuracy:', score[1])
 ##########################################
 # End of mnist_mlp.py ####################
 ##########################################
-
-
-################ ADD MODEL ABOVE USING gParameters DICTIONARY AS CURRENT HYPERPARAMETER SET; DO NOT MODIFY BELOW #######################################
-# Ensure that above you DEFINE the history object (as in, e.g., the return value of model.fit()) or val_to_return (a single number) in your model; below we essentially RETURN those values
-try: history
-except NameError:
-    try: val_to_return
-    except NameError:
-        print("Error: Neither a history object nor a val_to_return variable was defined upon running the model on the current hyperparameter set; exiting")
-        exit
-    else:
-        wrapper_connector.write_history_from_value(val_to_return, 'val_to_return.json')
-else:
-    wrapper_connector.write_history(history, 'val_to_return.json')

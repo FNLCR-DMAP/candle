@@ -11,12 +11,12 @@ def initialize_parameters():
     mymodel_common = candle.Benchmark(os.path.dirname(os.path.realpath(__file__)), os.getenv("DEFAULT_PARAMS_FILE"), 'keras', prog='myprogram', desc='My CANDLE example')
 
     # Read the parameters (in a dictionary format) pointed to by the environment variable DEFAULT_PARAMS_FILE
-    gParameters = candle.initialize_parameters(mymodel_common)
+    hyperparams = candle.initialize_parameters(mymodel_common)
 
     # Return this dictionary of parameters
-    return(gParameters)
+    return(hyperparams)
 
-def run(gParameters):
+def run(hyperparams):
 
     # Define the dummy history class; defining it here to keep this file aligned with the standard CANDLE-compliance procedure
     class HistoryDummy:
@@ -24,18 +24,18 @@ def run(gParameters):
             self.history = {'val_loss': [mynum], 'val_corr': [mynum], 'val_dice_coef': [mynum]}
 
     # Reformat a value that doesn't have an analogous field in the JSON format
-    gParameters['datatype'] = str(gParameters['datatype'])
+    hyperparams['datatype'] = str(hyperparams['datatype'])
 
     # Write the current set of hyperparameters to a JSON file
     import json
     with open('params.json', 'w') as outfile:
-        json.dump(gParameters, outfile)
+        json.dump(hyperparams, outfile)
 
     # Run the wrapper script model_wrapper.sh where the environment is defined and the model (whether in Python or R) is called
     myfile = open('subprocess_out_and_err.txt','w')
     import subprocess, os
     print('Starting run of model_wrapper.sh from candle_compliant_wrapper.py...')
-    subprocess.run(['bash', os.getenv("CANDLE")+'/Supervisor/templates/scripts/model_wrapper.sh'], stdout=myfile, stderr=subprocess.STDOUT)
+    subprocess.run(['bash', os.getenv("CANDLE_WRAPPERS")+'/templates/scripts/model_wrapper.sh'], stdout=myfile, stderr=subprocess.STDOUT)
     print('Finished run of model_wrapper.sh from candle_compliant_wrapper.py')
     myfile.close()
 
@@ -47,8 +47,8 @@ def run(gParameters):
     return(history)
     
 def main():
-    gParameters = initialize_parameters()
-    run(gParameters)
+    hyperparams = initialize_parameters()
+    run(hyperparams)
 
 if __name__ == '__main__':
     main()
