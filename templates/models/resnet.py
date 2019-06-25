@@ -19,12 +19,12 @@ def initialize_parameters():
     mymodel_common = candle.Benchmark(file_path,os.getenv("DEFAULT_PARAMS_FILE"),'keras',prog='myprog',desc='My model')
 
     # Get a dictionary of the model hyperparamters
-    gParameters = candle.initialize_parameters(mymodel_common)
+    hyperparams = candle.initialize_parameters(mymodel_common)
 
     # Return the dictionary of the hyperparameters
-    return(gParameters)
+    return(hyperparams)
     
-def run(gParameters):
+def run(hyperparams):
     print('Running model...')
 
     #### Begin model input ##########################################################################################
@@ -226,7 +226,7 @@ def run(gParameters):
 
     # Import relevant modules and functions
     import sys
-    sys.path.append(gParameters['segmentation_models_repo'])
+    sys.path.append(hyperparams['segmentation_models_repo'])
     import numpy as np
     from keras.models import Model
     from keras.layers import Input, concatenate, Conv2D, MaxPooling2D, Conv2DTranspose, Dropout
@@ -248,20 +248,20 @@ def run(gParameters):
     model_json_fname  = 'model.json'
     csvfname = 'model.csv'
     
-    do_prediction = gParameters['predict']
+    do_prediction = hyperparams['predict']
     if not do_prediction: # Train...
         print('Training...')
 
         # Parameters
-        inputnpyfname = gParameters['images']
-        labels = gParameters['labels']
-        initialize = gParameters['initialize']
-        backbone = gParameters['backbone']
-        encoder = gParameters['encoder']
-        lr = float(gParameters['lr'])
-        batch_size = gParameters['batch_size']
-        obj_return = gParameters['obj_return']
-        epochs = gParameters['epochs']
+        inputnpyfname = hyperparams['images']
+        labels = hyperparams['labels']
+        initialize = hyperparams['initialize']
+        backbone = hyperparams['backbone']
+        encoder = hyperparams['encoder']
+        lr = float(hyperparams['lr'])
+        batch_size = hyperparams['batch_size']
+        obj_return = hyperparams['obj_return']
+        epochs = hyperparams['epochs']
 
         # Preprocess the data
         imgs_train,imgs_mask_train = preprocess_data(do_prediction,inputnpyfname,labels,expandChannel,backbone)
@@ -287,10 +287,10 @@ def run(gParameters):
         print('Inferring...')
 
         # Parameters
-        inputnpyfname = gParameters['images']
-        initialize = gParameters['initialize']
-        backbone = gParameters['backbone']
-        # lr = float(gParameters['lr']) # this isn't needed but we're keeping it for the U-Net, where it is "needed"
+        inputnpyfname = hyperparams['images']
+        initialize = hyperparams['initialize']
+        backbone = hyperparams['backbone']
+        # lr = float(hyperparams['lr']) # this isn't needed but we're keeping it for the U-Net, where it is "needed"
 
         # Preprocess the data
         imgs_infer = preprocess_data(do_prediction,inputnpyfname,'',expandChannel,backbone)
@@ -310,8 +310,8 @@ def run(gParameters):
 
 def main():
     print('Running main program...')
-    gParameters = initialize_parameters()
-    run(gParameters)
+    hyperparams = initialize_parameters()
+    run(hyperparams)
 
 if __name__ == '__main__':
     main()

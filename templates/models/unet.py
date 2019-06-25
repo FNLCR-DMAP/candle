@@ -22,12 +22,12 @@ def initialize_parameters():
     mymodel_common = candle.Benchmark(file_path,os.getenv("DEFAULT_PARAMS_FILE"),'keras',prog='myprog',desc='My model')
 
     # Get a dictionary of the model hyperparamters
-    gParameters = candle.initialize_parameters(mymodel_common)
+    hyperparams = candle.initialize_parameters(mymodel_common)
 
     # Return the dictionary of the hyperparameters
-    return(gParameters)
+    return(hyperparams)
 
-def run(gParameters):
+def run(hyperparams):
     print('Running model...')
 
     #### Begin model input ##########################################################################################
@@ -292,25 +292,25 @@ def run(gParameters):
     # Basically a constant
     modelwtsfname = 'model_weights.h5'
 
-    if not gParameters['predict']:
+    if not hyperparams['predict']:
         print('Training...')
 
         # Parameters
-        n_layers = gParameters['nlayers']
-        filter_size = gParameters['num_filters']
-        dropout = gParameters['dropout']
-        activation_func = gParameters['activation']
-        conv_size = gParameters['conv_size']
-        loss_func = gParameters['loss_func']
-        last_activation = gParameters['last_act']
-        batch_norm = gParameters['batch_norm']
-        learning_rate = float(gParameters['lr'])
-        images = gParameters['images']
-        labels = gParameters['labels']
-        batch_size = gParameters['batch_size']
-        epochs = gParameters['epochs']
-        obj_return = gParameters['obj_return']
-        initialize = gParameters['initialize']
+        n_layers = hyperparams['nlayers']
+        filter_size = hyperparams['num_filters']
+        dropout = hyperparams['dropout']
+        activation_func = hyperparams['activation']
+        conv_size = hyperparams['conv_size']
+        loss_func = hyperparams['loss_func']
+        last_activation = hyperparams['last_act']
+        batch_norm = hyperparams['batch_norm']
+        learning_rate = float(hyperparams['lr'])
+        images = hyperparams['images']
+        labels = hyperparams['labels']
+        batch_size = hyperparams['batch_size']
+        epochs = hyperparams['epochs']
+        obj_return = hyperparams['obj_return']
+        initialize = hyperparams['initialize']
 
         history_callback = evaluate_params(images, labels, batch_size, epochs, obj_return, initialize, n_layers, filter_size, dropout, activation_func, conv_size, loss_func, last_activation, batch_norm, learning_rate) # note that history_callback is what's returned by model.fit()
         print("Minimum validation loss:")
@@ -321,17 +321,17 @@ def run(gParameters):
         print('Inferring...')
 
         # Parameters
-        n_layers = gParameters['nlayers']
-        filter_size = gParameters['num_filters']
-        dropout = gParameters['dropout']
-        activation_func = gParameters['activation']
-        conv_size = gParameters['conv_size']
-        loss_func = gParameters['loss_func']
-        last_activation = gParameters['last_act']
-        batch_norm = gParameters['batch_norm']
-        learning_rate = float(gParameters['lr'])
-        images = gParameters['images']
-        initialize = gParameters['initialize']
+        n_layers = hyperparams['nlayers']
+        filter_size = hyperparams['num_filters']
+        dropout = hyperparams['dropout']
+        activation_func = hyperparams['activation']
+        conv_size = hyperparams['conv_size']
+        loss_func = hyperparams['loss_func']
+        last_activation = hyperparams['last_act']
+        batch_norm = hyperparams['batch_norm']
+        learning_rate = float(hyperparams['lr'])
+        images = hyperparams['images']
+        initialize = hyperparams['initialize']
 
         #It is not necessary to pass masks for prediction, but I am just following the function
         #prototype for now.
@@ -350,8 +350,8 @@ def run(gParameters):
 
 def main():
     print('Running main program...')
-    gParameters = initialize_parameters()
-    run(gParameters)
+    hyperparams = initialize_parameters()
+    run(hyperparams)
 
 if __name__ == '__main__':
     main()

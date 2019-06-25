@@ -290,10 +290,10 @@ def initialize_parameters():
     prog='uno_baseline', desc='Build neural network based models to predict tumor response to single and paired drugs.')
     
     # Initialize parameters
-    gParameters = candle.initialize_parameters(unoBmk)
-    #benchmark.logger.info('Params: {}'.format(gParameters))
+    hyperparams = candle.initialize_parameters(unoBmk)
+    #benchmark.logger.info('Params: {}'.format(hyperparams))
 
-    return gParameters
+    return hyperparams
 
 
 class Struct:

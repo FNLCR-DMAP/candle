@@ -15,12 +15,12 @@ def initialize_parameters():
     import candle_keras as candle
 
     # Initialize parameters
-    gParameters = candle.initialize_parameters(mnist_common)
-    csv_logger = CSVLogger('{}/params.log'.format(gParameters))
+    hyperparams = candle.initialize_parameters(mnist_common)
+    csv_logger = CSVLogger('{}/params.log'.format(hyperparams))
 
-    return gParameters
+    return hyperparams
 
-def run(gParameters):
+def run(hyperparams):
     ##########################################
     # Your DL start here. See mnist_mlp.py   #
     ##########################################
@@ -39,12 +39,12 @@ def run(gParameters):
     from keras.layers import Dense, Dropout
     from keras.optimizers import RMSprop
 
-    batch_size = gParameters['batch_size']
+    batch_size = hyperparams['batch_size']
     num_classes = 10
-    epochs = gParameters['epochs']
+    epochs = hyperparams['epochs']
 
-    activation = gParameters['activation']
-    optimizer = gParameters['optimizer']
+    activation = hyperparams['activation']
+    optimizer = hyperparams['optimizer']
 
     # the data, split between train and test sets
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -89,8 +89,8 @@ def run(gParameters):
     return history
 
 def main():
-    gParameters = initialize_parameters()
-    run(gParameters)
+    hyperparams = initialize_parameters()
+    run(hyperparams)
 
 if __name__ == '__main__':
     main()
