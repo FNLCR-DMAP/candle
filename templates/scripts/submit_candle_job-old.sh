@@ -12,7 +12,7 @@ export DEFAULT_PARAMS_FILE="$CANDLE_WRAPPERS/templates/model_params/mnist1.txt"
 
 # Workflow specification
 export WORKFLOW_TYPE="upf"
-export WORKFLOW_SETTINGS_FILE="$CANDLE_WRAPPERS/templates/workflow_settings/upf3.txt"
+export WORKFLOW_SETTINGS_FILE="$CANDLE_WRAPPERS/templates/workflow_settings/upf_workflow-3.txt"
 
 # Job specification
 export EXPERIMENTS="$(pwd)/experiments" # this will contain the job output; ensure this directory exists

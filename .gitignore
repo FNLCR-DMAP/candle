@@ -3,3 +3,4 @@ archive/
 *._*
 __pycache__
 a.out
+.DS_Store
