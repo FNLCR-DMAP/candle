@@ -2,11 +2,11 @@
 
 # Call like:
 #
-#   make_image_gallery IMAGE-DIR FILETYPE WIDTH VERBOSE FILTERS NUM-COLUMNS OUTPUT-DIR
+#   $CANDLE_WRAPPERS/analysis/make_image_gallery.sh IMAGE-DIR FILETYPE WIDTH VERBOSE FILTERS NUM-COLUMNS OUTPUT-DIR
 #
 # e.g.,
 #
-#   make_image_gallery "/home/weismanal/notebook/2019-02-11/postprocessing/13-hpset_32/movie-roi3_view_x" ".png" 480 0 "point cubic lanczos mitchell" 3 "/home/weismanal/notebook/2019-04-09"
+#   $CANDLE_WRAPPERS/analysis/make_image_gallery.sh "/home/weismanal/notebook/2019-02-11/postprocessing/13-hpset_32/movie-roi3_view_x" ".png" 480 0 "point cubic lanczos mitchell" 3 "/home/weismanal/notebook/2019-04-09"
 #
 
 # Use ImageMajick's convert command to resize each image using a particular filter

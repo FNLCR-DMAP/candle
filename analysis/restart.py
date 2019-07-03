@@ -86,7 +86,7 @@ def get_remaining_evaluations(upf_file, all_eval):
         A str that contains information the upf info for the configuration
         that did not complete
     """
-    #Read and parse the originla upf
+    #Read and parse the original upf
 
     global eval_key
 

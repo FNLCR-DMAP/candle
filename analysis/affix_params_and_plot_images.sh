@@ -2,7 +2,7 @@
 
 # Run this script like:
 #
-#   affix_params_and_plot_images.sh SUFFIX WIDTH NCOLUMNS [EXPDIR]
+#   $CANDLE_WRAPPERS/analysis/affix_params_and_plot_images.sh SUFFIX WIDTH NCOLUMNS [EXPDIR]
 #
 # Arguments:
 #
@@ -13,10 +13,10 @@
 #
 # Sample calls:
 #
-#   /data/BIDS-HPC/public/software/checkouts/fnlcr-bids-hpc/scripts/affix_params_and_plot_images.sh ".png" 480 3
-#   /data/BIDS-HPC/public/software/checkouts/fnlcr-bids-hpc/scripts/affix_params_and_plot_images.sh ".png" 480 3 last-exp
-#   /data/BIDS-HPC/public/software/checkouts/fnlcr-bids-hpc/scripts/affix_params_and_plot_images.sh ".png" 480 3 /home/weismanal/notebook/2019-04-26/test_jurgens_script_using_candle/last-exp
-#   /data/BIDS-HPC/public/software/checkouts/fnlcr-bids-hpc/scripts/affix_params_and_plot_images.sh "umap_pbmck3.png" 480 3
+#   $CANDLE_WRAPPERS/analysis/affix_params_and_plot_images.sh ".png" 480 3
+#   $CANDLE_WRAPPERS/analysis/affix_params_and_plot_images.sh ".png" 480 3 last-exp
+#   $CANDLE_WRAPPERS/analysis/affix_params_and_plot_images.sh ".png" 480 3 /home/weismanal/notebook/2019-04-26/test_jurgens_script_using_candle/last-exp
+#   $CANDLE_WRAPPERS/analysis/affix_params_and_plot_images.sh "umap_pbmck3.png" 480 3
 #
 
 # Process the script arguments
@@ -66,4 +66,4 @@ for dir in ${expdir}/run/*; do
 done
 
 # Use the make_image_gallery.sh script to downsample the images and create a gallery of them
-/data/BIDS-HPC/public/software/checkouts/fnlcr-bids-hpc/scripts/make_image_gallery.sh "$linksdir" "$suffix2" "$width" 0 "lanczos" "$ncolumns" "$expdir"
+$CANDLE_WRAPPERS/analysis/make_image_gallery.sh "$linksdir" "$suffix2" "$width" 0 "lanczos" "$ncolumns" "$expdir"

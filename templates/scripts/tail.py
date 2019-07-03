@@ -1,7 +1,7 @@
 # Ensure that above you DEFINE the history object (as in, e.g., the return value of model.fit()) or val_to_return (a single number) in your model; below we essentially RETURN those values
 
 # Import relevant module
-import json
+#import json # Actually, this is done in head.py
 
 try: history
 except NameError:

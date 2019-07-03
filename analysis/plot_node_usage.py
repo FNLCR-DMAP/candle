@@ -1,4 +1,4 @@
-# NOTE: This script is generally to be called by plot_node_usage.sh
+# NOTE: This script is generally to be called by $CANDLE_WRAPPERS/analysis/plot_node_usage.sh
 
 # Import relevant modules
 import numpy as np

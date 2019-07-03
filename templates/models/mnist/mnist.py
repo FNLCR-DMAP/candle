@@ -1,5 +1,7 @@
 # add candle_keras library in path
-candle_lib = '/data/BIDS-HPC/public/candle/Candle/common'
+#candle_lib = '/data/BIDS-HPC/public/candle/Candle/common'
+import os
+candle_lib = os.getenv("CANDLE") + '/Candle/common'
 import sys
 sys.path.append(candle_lib)
 

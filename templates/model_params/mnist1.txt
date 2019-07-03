@@ -1,4 +1,4 @@
-[Global_Params]
+[Global Params]
 epochs=20
 batch_size=128
 activation='relu'

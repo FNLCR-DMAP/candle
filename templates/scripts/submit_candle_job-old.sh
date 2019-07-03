@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Load the build environment; DO NOT MODIFY
-module load $MODULES_FOR_BUILD
+module load $DEFAULT_PYTHON_MODULE
 
 
 #### MODIFY ONLY BELOW ####################################################################

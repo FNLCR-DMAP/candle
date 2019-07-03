@@ -1,9 +1,11 @@
 # Import relevant modules
 from keras import backend as K
 import numpy as np
+import os
 
 # Parameters
-candle_lib = '/data/BIDS-HPC/public/candle/Candle/common'
+#candle_lib = '/data/BIDS-HPC/public/candle/Candle/common'
+candle_lib = os.getenv("CANDLE") + '/Candle/common'
 
 def initialize_parameters():
     print('Initializing parameters...')

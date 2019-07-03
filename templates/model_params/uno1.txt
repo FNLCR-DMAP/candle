@@ -1,4 +1,4 @@
-[Global_Params]
+[Global Params]
 activation = 'relu'
 agg_dose = None
 base_lr = None

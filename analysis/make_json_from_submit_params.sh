@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Must have CANDLE module loaded prior to running this script
+# If there are problems later, it may be that we reference run_workflows.sh below from itself since we call this script from it
+
 # Write a function to output the key-value pairs
 output_json_format() {
     params=("$@")
@@ -8,17 +11,12 @@ output_json_format() {
     done
 }
 
-# These are variables from the module .lua files
-params1=(CANDLE SITE TURBINE_HOME)
-
-# This is the result from:
-#   submit_script="/data/BIDS-HPC/public/candle-dev/Supervisor/templates/scripts/submit_candle_job.sh"
-#   params=( $(grep "^export " $submit_script | grep -v "export USE_CANDLE=" | awk -v ORS=" " '{split($2,arr,"="); print arr[1]}'))
-params2=(MODEL_SCRIPT DEFAULT_PARAMS_FILE PYTHON_BIN_PATH EXEC_PYTHON_MODULE SUPP_MODULES SUPP_PYTHONPATH WORKFLOW_TYPE WORKFLOW_SETTINGS_FILE EXPERIMENTS MODEL_NAME OBJ_RETURN PROCS WALLTIME GPU_TYPE)
-
-# These are variables from run_workflows.sh
-params3=(CPUS_PER_TASK MEM_PER_NODE PPN)
+# Get the variables we'd like to save
+vars="$(grep "^setenv(" $CANDLE_WRAPPERS/lmod_modules/main.lua | awk -v FS="setenv\\\(\"" '{split($2,arr,"\""); print arr[1]}')"
+vars+=" $(grep "^export " $CANDLE_WRAPPERS/templates/scripts/submit_candle_job-new.sh | awk -v FS="export " '{split($2,arr,"="); print arr[1]}')"
+vars+=" $(grep "^[ ]*export " $CANDLE_WRAPPERS/templates/scripts/run_workflows.sh | awk -v FS="export " '{split($2,arr,"="); print arr[1]}')"
+vars+=" SUPP_MODULES PYTHON_BIN_PATH EXEC_PYTHON_MODULE SUPP_PYTHONPATH EXTRA_SCRIPT_ARGS EXEC_R_MODULE RESTART_FROM_EXP USE_CANDLE" # from $CANDLE_WRAPPERS/templates/scripts/model_wrapper.sh, plus one more from run_workflows.sh
 
 # Write the dictionary in JSON format
-tmp="$(output_json_format "${params1[@]}")$(output_json_format "${params2[@]}")$(output_json_format "${params3[@]}")"
+tmp=$(output_json_format $(echo $vars | awk -v RS=" " '{print}' | sort -u | grep -v "^$"))
 echo "{${tmp:0:${#tmp}-2}}" > metadata.json

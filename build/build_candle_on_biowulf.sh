@@ -6,18 +6,18 @@
 #
 # by calling, from a fast network-shared directory (such as on the /data drive; calling it $SHARED_DIR below), e.g.,
 #
-#   /data/BIDS-HPC/public/software/checkouts/fnlcr-bids-sdsi/candle/build/build_candle_on_biowulf.sh <SECTION>
+#   $CANDLE_WRAPPERS/build/build_candle_on_biowulf.sh <SECTION>
 #
 # Things to set:
 #
-#   (1) Assume new (or old) candle module is created and loaded as usual (take reference from fnlcr-bids-sdsi/candle/lmod_modules/{main.lua,dev.lua})
+#   (1) Assume new (or old) candle module is created and loaded as usual (take reference from $CANDLE_WRAPPERS/lmod_modules/{main.lua,dev.lua})
 #   (2)
         section=${1:-0} # set this to 1, 2, 3, etc. sequentially to build CANDLE incrementally
 #
 
 
 # Load the build Python environment; always do this
-module load $MODULES_FOR_BUILD
+module load $DEFAULT_PYTHON_MODULE
 
 #0: General setup steps
 if [ $section -eq 0 ]; then

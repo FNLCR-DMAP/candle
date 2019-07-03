@@ -1,4 +1,7 @@
-# The object returned above must be called "temp" and of type data.frame with val_loss as a key, e.g., temp$val_loss
+# Above you must return a number named "val_to_return"
+
+# Store the number val_to_return as the val_loss "key" in a data.frame object called temp
+temp <- data.frame( val_loss = val_to_return)
 
 # append two copies of the temp value to the data.frame
 # with a different name

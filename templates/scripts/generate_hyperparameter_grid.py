@@ -11,11 +11,12 @@ arguments = sys.argv[1:]
 # Make sure at least one set of variables is specified
 if len(arguments) == 0:
     print('')
-    print('Call this script with one or more strings of two-element lists containing (1) the variable name and (2) the values. Quote (probably, double-quote) each string.')
+    print('Call this script with one or more strings of two-element lists containing (1) the variable name and (2) the values, which must be a list. Double-quote each string argument.')
     print('')
     print('A sample call would be:')
     print('')
-    print('  python generate_hyperparameter_grid.py "[\'john\', np.arange(5,15,2)]" "[\'letter\', [\'x\',\'y\',\'z\']]" "[\'arr\', [[2,2],None,[2,2,2],[2,2,2,2]]]" "[\'smith\', np.arange(-1,1,0.2)]"')
+    print('  module load python/3.6')
+    print('  python $CANDLE_WRAPPERS/templates/scripts/generate_hyperparameter_grid.py "[\'john\', np.arange(5,15,2)]" "[\'single_num\', [4]]" "[\'letter\', [\'x\',\'y\',\'z\']]" "[\'arr\', [[2,2],None,[2,2,2],[2,2,2,2]]]" "[\'smith\', np.arange(-1,1,0.2)]"')
     print('')
     exit()
 

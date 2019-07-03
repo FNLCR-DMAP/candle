@@ -15,7 +15,7 @@ echo "HOST: $(hostname)"
 echo "GPU: ${CUDA_VISIBLE_DEVICES:-NA}"
 
 # Unload environment in which we built Swift/T
-module unload $MODULES_FOR_BUILD
+module unload $DEFAULT_PYTHON_MODULE
 
 # Load a custom, SUPPlementary environment if it's set
 if [ -n "$SUPP_MODULES" ]; then
@@ -40,6 +40,10 @@ if [ "x$suffix" == "xpy" ]; then
         module load "${EXEC_PYTHON_MODULE:-$DEFAULT_PYTHON_MODULE}"
     fi
 
+    # ALW: On 6/29/19, moving this from head.py; not sure why I put it there but there may have been a reason!
+    # If it's defined in the environment, append $SUPP_PYTHONPATH to the Python path
+    export PYTHONPATH+=":$SUPP_PYTHONPATH"
+
     # Create a wrapped version of the model in wrapped_model.py
     wrap_model "$CANDLE_WRAPPERS/templates/scripts/head.py" "$MODEL_SCRIPT" "$CANDLE_WRAPPERS/templates/scripts/tail.py" > wrapped_model.py
 
@@ -51,8 +55,8 @@ if [ "x$suffix" == "xpy" ]; then
 # Run a model written in R
 elif [ "x$suffix" == "xr" ]; then
 
-    # Load the default R module
-    module load "$DEFAULT_R_MODULE"
+    # Load the default R module if a different module is not defined
+    module load "${EXEC_R_MODULE:-$DEFAULT_R_MODULE}"
 
     # Create a wrapped version of the model in wrapped_model.R
     wrap_model "$CANDLE_WRAPPERS/templates/scripts/head.R" "$MODEL_SCRIPT" "$CANDLE_WRAPPERS/templates/scripts/tail.R" > wrapped_model.R
