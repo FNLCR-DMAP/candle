@@ -1,4 +1,3 @@
-# This is based off of nt3_nightly.R
 
 # NT3 Hyperparameter Search - Test 1
 # These parameters should stay small for short tests

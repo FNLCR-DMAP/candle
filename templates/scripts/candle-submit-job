@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Input parameter "submission_script"
+submission_script=$1
+
+echo "Submitting the CANDLE submission script \"$submission_script\"... "
+
+# Run the submission script
+./$submission_script && echo "done" || echo "failed"

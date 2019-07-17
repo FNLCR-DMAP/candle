@@ -41,8 +41,9 @@ if [ "x$suffix" == "xpy" ]; then
     fi
 
     # ALW: On 6/29/19, moving this from head.py; not sure why I put it there but there may have been a reason!
-    # If it's defined in the environment, append $SUPP_PYTHONPATH to the Python path
-    export PYTHONPATH+=":$SUPP_PYTHONPATH"
+    # ALW: On 7/5/19, redoing this, found I did it because if it's an environment variable it gets added to sys.path too early (pretty much first-thing); doing it here appends to the path at the end!
+    # # If it's defined in the environment, append $SUPP_PYTHONPATH to the Python path
+    # export PYTHONPATH+=":$SUPP_PYTHONPATH"
 
     # Create a wrapped version of the model in wrapped_model.py
     wrap_model "$CANDLE_WRAPPERS/templates/scripts/head.py" "$MODEL_SCRIPT" "$CANDLE_WRAPPERS/templates/scripts/tail.py" > wrapped_model.py

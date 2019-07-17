@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Input parameter experiment directory
+exp_dir=$1
+
+# Output the aggregated results to stdout
+$CANDLE_WRAPPERS/analysis/tabulate_results.sh $exp_dir

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script is a wrapper that prepares multiple things for use at FNLCR prior to running the workflows; it is basically a "hidden settings" file...this should be called from submit_candle_job-new.sh
+# This script is a wrapper that prepares multiple things for use at FNLCR prior to running the workflows; it is basically a "hidden settings" file...this should be called from submit_candle_job.sh
 
 # Simple settings
 export WORKFLOW_TYPE=${WORKFLOW_TYPE:-$(echo $WORKFLOW_SETTINGS_FILE | awk -v FS="/" '{split($NF,arr,"_workflow-"); print(arr[1])}')}
@@ -58,13 +58,17 @@ if [ -n "$RESTART_FROM_EXP" ]; then
 fi
 
 # Do some workflow-dependent things
-if [ "x$WORKFLOW_TYPE" == "xupf" ]; then # if doing the UPF workflow...
+#if [ "x$WORKFLOW_TYPE" == "xupf" ]; then # if doing the UPF workflow...
+if [ "x$WORKFLOW_TYPE" == "xgrid" ]; then # if doing the UPF workflow...
     # If a restart job is requested...
     export R_FILE=${R_FILE:-"NA"}
     export PROCS=${PROCS:-$((NGPUS+1))}
-elif [ "x$WORKFLOW_TYPE" == "xmlrMBO" ]; then # if doing the mlrMBO workflow...
+    export WORKFLOW_TYPE="upf"
+#elif [ "x$WORKFLOW_TYPE" == "xmlrMBO" ]; then # if doing the mlrMBO workflow...
+elif [ "x$WORKFLOW_TYPE" == "xbayesian" ]; then # if doing the mlrMBO workflow...
     export R_FILE=${R_FILE:-"mlrMBO-mbo.R"}
     export PROCS=${PROCS:-$((NGPUS+2))}
+    export WORKFLOW_TYPE="mlrMBO"
 fi
 
 # Save the job's parameters into a JSON file
@@ -75,7 +79,13 @@ if [ "${USE_CANDLE:-1}" -eq 1 ]; then
     if [ "x$WORKFLOW_TYPE" == "xupf" ]; then
         "$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$WORKFLOW_SETTINGS_FILE"
     elif [ "x$WORKFLOW_TYPE" == "xmlrMBO" ]; then
-        "$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$WORKFLOW_SETTINGS_FILE" "$MODEL_NAME"
+
+        # From $CANDLE/Supervisor/workflows/mlrMBO/test/cfg-sys-nightly.sh:
+        export SH_TIMEOUT=${SH_TIMEOUT:-}
+        export IGNORE_ERRORS=0
+
+        #"$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$WORKFLOW_SETTINGS_FILE" "$MODEL_NAME"
+        "$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$CANDLE_WRAPPERS/templates/scripts/dummy_cfg-prm.sh" "$MODEL_NAME"
     fi
 # ...otherwise, run the wrapper alone, outside of CANDLE
 else

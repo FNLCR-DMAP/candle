@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Parameter
+template=$1
+
+echo -n "Importing the files for the CANDLE template \"$template\"... "
+
+# Check for validity of the input parameter "template"
+echo $template | egrep -i "^bayesian$|^grid$|^r$" &> /dev/null
+
+# If it's not a valid input...
+if [ ! $? -eq 0 ]; then
+    echo -e "\nError: Input argument \"$template\" is not one of {grid,bayesian,r}"
+    exit 1
+
+# ...otherwise, copy over the corresponding template files
+else
+    template_lower=$(echo $template | awk '{print(tolower($0))}')
+    cp $CANDLE_WRAPPERS/templates/examples/$template_lower/* . && echo "done" || echo "failed"
+fi

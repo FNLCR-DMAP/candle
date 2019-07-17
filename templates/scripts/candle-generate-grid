@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Save all the arguments to this script to an array called args_arr
+args_arr=($@)
+
+echo -n "Generating hyperparameter grid into file \"grid_workflow-XXXX.txt\"... "
+
+# Load the latest Python module on Biowulf since the following function requires numpy
+module -q load python/3.6
+
+# Run the script that generates the hyperparameter grid
+python $CANDLE_WRAPPERS/templates/scripts/generate_hyperparameter_grid.py "${args_arr[@]}" && echo "done" || echo "failed"

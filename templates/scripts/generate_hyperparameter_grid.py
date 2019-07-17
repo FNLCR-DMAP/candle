@@ -49,13 +49,14 @@ def add_to_set(set_str_base, name, value, dtype):
     return(tmp_str.format(set_str_base, name, wrap_char, value, wrap_char))
 
 # Define a function to output each set of hyperparameters
-def print_str(set_str, nhpset):
+def print_str(set_str, nhpset, f):
     nhpset += 1
-    print('{{"id": "hpset_{:05}"{}}}'.format(nhpset, set_str))
+    #print('{{"id": "hpset_{:05}"{}}}'.format(nhpset, set_str))
+    f.write('{{"id": "hpset_{:05}"{}}}\n'.format(nhpset, set_str))
     return(nhpset)
 
 # Define a recursive function that when initialized creates an unrolled parameter file
-def make_set(variables, set_str_base, ivar, nhpset):
+def make_set(variables, set_str_base, ivar, nhpset, f):
 
     # Get the current variable name and its set of values
     name = variables[ivar][0]
@@ -79,16 +80,17 @@ def make_set(variables, set_str_base, ivar, nhpset):
         if ivar < len(variables)-1:
 
             # Call this function again setting set_str-->set_str_base, ivar+1-->ivar, updated current hyperparameter set index (nhpset), and the same "variables" value
-            nhpset = make_set(variables, set_str, ivar+1, nhpset)
+            nhpset = make_set(variables, set_str, ivar+1, nhpset, f)
 
         else:
 
             # Otherwise, print the current hyperparameter set with a unique ID
-            nhpset = print_str(set_str, nhpset)
+            nhpset = print_str(set_str, nhpset, f)
 
     # Return the current hyperparameter set index
     return(nhpset)
 
 
 # Call the make_set() function with initialized settings
-make_set(variables, '', 0, 0)
+with open('grid_workflow-XXXX.txt', 'w') as f:
+    make_set(variables, '', 0, 0, f)
