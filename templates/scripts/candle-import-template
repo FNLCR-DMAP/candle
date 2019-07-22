@@ -16,5 +16,5 @@ if [ ! $? -eq 0 ]; then
 # ...otherwise, copy over the corresponding template files
 else
     template_lower=$(echo $template | awk '{print(tolower($0))}')
-    cp $CANDLE_WRAPPERS/templates/examples/$template_lower/* . && echo "done" || echo "failed"
+    cp $CANDLE/wrappers/templates/examples/$template_lower/* . && echo "done" || echo "failed"
 fi

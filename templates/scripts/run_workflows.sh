@@ -5,7 +5,7 @@
 # Simple settings
 export WORKFLOW_TYPE=${WORKFLOW_TYPE:-$(echo $WORKFLOW_SETTINGS_FILE | awk -v FS="/" '{split($NF,arr,"_workflow-"); print(arr[1])}')}
 export EXPERIMENTS=${EXPERIMENTS:-"$(pwd)/experiments"}
-export MODEL_PYTHON_DIR=${MODEL_PYTHON_DIR:-"$CANDLE_WRAPPERS/templates/scripts"} # these are constants referring to the CANDLE-compliant wrapper Python script
+export MODEL_PYTHON_DIR=${MODEL_PYTHON_DIR:-"$CANDLE/wrappers/templates/scripts"} # these are constants referring to the CANDLE-compliant wrapper Python script
 export MODEL_PYTHON_SCRIPT=${MODEL_PYTHON_SCRIPT:-"candle_compliant_wrapper"}
 export OBJ_RETURN=${OBJ_RETURN:-"val_loss"}
 export MODEL_NAME=${MODEL_NAME:-"candle_job"}
@@ -46,7 +46,7 @@ if [ -n "$RESTART_FROM_EXP" ]; then
     fi
     # Create the new restart UPF
     upf_new="upf_workflow-restart.txt"
-    python $CANDLE_WRAPPERS/analysis/restart.py $metadata_file > $upf_new
+    python $CANDLE/wrappers/analysis/restart.py $metadata_file > $upf_new
     # If the new UPF is empty, then there's nothing to do, so quit
     if [ -s $upf_new ]; then # if it's NOT empty...
         export WORKFLOW_SETTINGS_FILE="$(pwd)/$upf_new"
@@ -72,7 +72,7 @@ elif [ "x$WORKFLOW_TYPE" == "xbayesian" ]; then # if doing the mlrMBO workflow..
 fi
 
 # Save the job's parameters into a JSON file
-$CANDLE_WRAPPERS/analysis/make_json_from_submit_params.sh
+$CANDLE/wrappers/analysis/make_json_from_submit_params.sh
 
 # If we want to run the wrapper using CANDLE...
 if [ "${USE_CANDLE:-1}" -eq 1 ]; then
@@ -85,7 +85,7 @@ if [ "${USE_CANDLE:-1}" -eq 1 ]; then
         export IGNORE_ERRORS=0
 
         #"$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$WORKFLOW_SETTINGS_FILE" "$MODEL_NAME"
-        "$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$CANDLE_WRAPPERS/templates/scripts/dummy_cfg-prm.sh" "$MODEL_NAME"
+        "$CANDLE/Supervisor/workflows/$WORKFLOW_TYPE/swift/workflow.sh" "$SITE" -a "$CANDLE/Supervisor/workflows/common/sh/cfg-sys-$SITE.sh" "$CANDLE/wrappers/templates/scripts/dummy_cfg-prm.sh" "$MODEL_NAME"
     fi
 # ...otherwise, run the wrapper alone, outside of CANDLE
 else

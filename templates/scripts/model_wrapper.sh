@@ -46,7 +46,7 @@ if [ "x$suffix" == "xpy" ]; then
     # export PYTHONPATH+=":$SUPP_PYTHONPATH"
 
     # Create a wrapped version of the model in wrapped_model.py
-    wrap_model "$CANDLE_WRAPPERS/templates/scripts/head.py" "$MODEL_SCRIPT" "$CANDLE_WRAPPERS/templates/scripts/tail.py" > wrapped_model.py
+    wrap_model "$CANDLE/wrappers/templates/scripts/head.py" "$MODEL_SCRIPT" "$CANDLE/wrappers/templates/scripts/tail.py" > wrapped_model.py
 
     # Run wrapped_model.py
     echo "Using Python for execution: $(command -v python)"
@@ -60,7 +60,7 @@ elif [ "x$suffix" == "xr" ]; then
     module load "${EXEC_R_MODULE:-$DEFAULT_R_MODULE}"
 
     # Create a wrapped version of the model in wrapped_model.R
-    wrap_model "$CANDLE_WRAPPERS/templates/scripts/head.R" "$MODEL_SCRIPT" "$CANDLE_WRAPPERS/templates/scripts/tail.R" > wrapped_model.R
+    wrap_model "$CANDLE/wrappers/templates/scripts/head.R" "$MODEL_SCRIPT" "$CANDLE/wrappers/templates/scripts/tail.R" > wrapped_model.R
 
     # Run wrapped_model.R
     echo "Using Rscript for execution: $(command -v Rscript)"

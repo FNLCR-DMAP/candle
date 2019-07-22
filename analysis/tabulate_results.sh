@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Run like "$CANDLE_WRAPPERS/analysis/tabulate_results.sh <EXPT-DIR>", e.g.,
-# "$CANDLE_WRAPPERS/analysis/tabulate_results.sh /home/weismanal/notebook/2019-07-06/jurgen_benchmarking-upf/experiments/X002"
+# Run like "$CANDLE/wrappers/analysis/tabulate_results.sh <EXPT-DIR>", e.g.,
+# "$CANDLE/wrappers/analysis/tabulate_results.sh /home/weismanal/notebook/2019-07-06/jurgen_benchmarking-upf/experiments/X002"
 
 # Function to get all the data from the CANDLE runs
 function get_data(){

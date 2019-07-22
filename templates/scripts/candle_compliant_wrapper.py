@@ -35,7 +35,7 @@ def run(hyperparams):
     myfile = open('subprocess_out_and_err.txt','w')
     import subprocess, os
     print('Starting run of model_wrapper.sh from candle_compliant_wrapper.py...')
-    subprocess.run(['bash', os.getenv("CANDLE_WRAPPERS")+'/templates/scripts/model_wrapper.sh'], stdout=myfile, stderr=subprocess.STDOUT)
+    subprocess.run(['bash', os.getenv("CANDLE")+'/wrappers/templates/scripts/model_wrapper.sh'], stdout=myfile, stderr=subprocess.STDOUT)
     print('Finished run of model_wrapper.sh from candle_compliant_wrapper.py')
     myfile.close()
 

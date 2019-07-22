@@ -17,4 +17,4 @@ export MAX_ITERATIONS=3
 export MAX_BUDGET=180
 
 ################ MODIFY ONLY ABOVE; DO NOT MODIFY BELOW ####################################################################
-$CANDLE_WRAPPERS/templates/scripts/run_workflows.sh
+$CANDLE/wrappers/templates/scripts/run_workflows.sh

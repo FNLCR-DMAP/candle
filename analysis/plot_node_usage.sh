@@ -2,8 +2,8 @@
 
 # Sample calls:
 #
-#   $CANDLE_WRAPPERS/analysis/plot_node_usage.sh "/home/weismanal/notebook/2019-04-23/testing_compute_node_usage/last-exp" "(10,4)" "."
-#   $CANDLE_WRAPPERS/analysis/plot_node_usage.sh "$(pwd)/last-exp" "(10,4)" "last-exp"
+#   $CANDLE/wrappers/analysis/plot_node_usage.sh "/home/weismanal/notebook/2019-04-23/testing_compute_node_usage/last-exp" "(10,4)" "."
+#   $CANDLE/wrappers/analysis/plot_node_usage.sh "$(pwd)/last-exp" "(10,4)" "last-exp"
 #
 
 # Process the inputs: get the location of the symbolic link pointing to the last job output and the new figure size and location
@@ -19,7 +19,7 @@ grep "^MODEL.SH START TIME: \|^HOST: \|^RUNID: \|^MODEL.SH END TIME: " $(find ${
 
 # Run the Python script that processes the timing data
 module load python/3.6
-python $CANDLE_WRAPPERS/analysis/plot_node_usage.py $datafile $figsize $figdir
+python $CANDLE/wrappers/analysis/plot_node_usage.py $datafile $figsize $figdir
 
 # Delete the temporary text file
 rm -f $datafile

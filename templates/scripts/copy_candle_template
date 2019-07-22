@@ -20,13 +20,13 @@ if [ ! -f $submission_script ]; then
         example="grid"
     fi
 
-    if [ ! -f $CANDLE_WRAPPERS/templates/scripts/submit_candle_job-$example.sh ]; then
+    if [ ! -f $CANDLE/wrappers/templates/scripts/submit_candle_job-$example.sh ]; then
         echo "ERROR: Example \"$example\" not known"
         echo "Usage: copy_candle_template [grid|bayesian|nt3]"
         exit
     fi
 
-    cp $CANDLE_WRAPPERS/templates/scripts/submit_candle_job-$example.sh $submission_script && echo "Created $submission_script in the current directory" || ret1=$(error_occurred "Could not create $submission_script in the current directory")
+    cp $CANDLE/wrappers/templates/scripts/submit_candle_job-$example.sh $submission_script && echo "Created $submission_script in the current directory" || ret1=$(error_occurred "Could not create $submission_script in the current directory")
 else
     echo "WARNING: Could not create $submission_script, as it already exists"
 fi

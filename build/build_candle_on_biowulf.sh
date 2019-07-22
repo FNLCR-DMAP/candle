@@ -6,7 +6,7 @@
 #
 # by calling, from a fast network-shared directory (such as on the /data drive; calling it $SHARED_DIR below), e.g.,
 #
-#   $CANDLE_WRAPPERS/build/build_candle_on_biowulf.sh <SECTION>
+#   $CANDLE/wrappers/build/build_candle_on_biowulf.sh <SECTION>
 #
 # Things to set:
 #
@@ -169,6 +169,6 @@ elif [ $section -eq 8 ]; then
 #9: Ensure permissions are correct
 elif [ $section -eq 9 ]; then
 
-    chmod -R g=u,o=u-w $CANDLE $CANDLE_WRAPPERS
+    chmod -R g=u,o=u-w $CANDLE
 
 fi

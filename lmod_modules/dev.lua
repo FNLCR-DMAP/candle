@@ -10,7 +10,7 @@ local base = "/data/BIDS-HPC/public/software/distributions/candle/dev"
 local wrappers = "/data/BIDS-HPC/public/software/checkouts/dev/fnlcr-bids-sdsi/candle"
 
 setenv("CANDLE", base) -- used by submit_candle_job.sh, run_without_candle.sh, and copy_candle_template.sh
-setenv("CANDLE_WRAPPERS", wrappers)
+-- setenv("CANDLE_WRAPPERS", wrappers)
 setenv("SITE", "biowulf") -- used by submit_candle_job.sh
 setenv("DEFAULT_PYTHON_MODULE", "python/3.6")
 setenv("DEFAULT_R_MODULE", "R/3.5.0")

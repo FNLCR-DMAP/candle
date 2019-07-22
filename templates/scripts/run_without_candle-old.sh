@@ -7,8 +7,8 @@
 #SBATCH --job-name=mnist_test_no_candle
 
 # Set the file that the Python script below will read in order to determine the model parameters
-export DEFAULT_PARAMS_FILE="$CANDLE_WRAPPERS/templates/model_params/mnist1.txt"
+export DEFAULT_PARAMS_FILE="$CANDLE/wrappers/templates/model_params/mnist1.txt"
 
 # Run the model
 module load $DEFAULT_PYTHON_MODULE
-python $CANDLE_WRAPPERS/templates/models/mnist/mnist_mlp.py
+python $CANDLE/wrappers/templates/models/mnist/mnist_mlp.py

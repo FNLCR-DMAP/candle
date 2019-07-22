@@ -6,13 +6,13 @@ module load $DEFAULT_PYTHON_MODULE
 
 #### MODIFY ONLY BELOW ####################################################################
 # Model specification
-export MODEL_PYTHON_DIR="$CANDLE_WRAPPERS/templates/models/mnist"
+export MODEL_PYTHON_DIR="$CANDLE/wrappers/templates/models/mnist"
 export MODEL_PYTHON_SCRIPT="mnist_mlp"
-export DEFAULT_PARAMS_FILE="$CANDLE_WRAPPERS/templates/model_params/mnist1.txt"
+export DEFAULT_PARAMS_FILE="$CANDLE/wrappers/templates/model_params/mnist1.txt"
 
 # Workflow specification
 export WORKFLOW_TYPE="upf"
-export WORKFLOW_SETTINGS_FILE="$CANDLE_WRAPPERS/templates/workflow_settings/upf_workflow-3.txt"
+export WORKFLOW_SETTINGS_FILE="$CANDLE/wrappers/templates/workflow_settings/upf_workflow-3.txt"
 
 # Job specification
 export EXPERIMENTS="$(pwd)/experiments" # this will contain the job output; ensure this directory exists

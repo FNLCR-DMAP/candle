@@ -14,4 +14,4 @@ export SUPP_R_LIBS="/data/BIDS-HPC/public/software/R/3.6/library"
 
 
 ################ MODIFY ONLY ABOVE; DO NOT MODIFY BELOW ####################################################################
-$CANDLE_WRAPPERS/templates/scripts/run_workflows.sh
+$CANDLE/wrappers/templates/scripts/run_workflows.sh

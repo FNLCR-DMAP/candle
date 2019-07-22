@@ -9,4 +9,4 @@ echo -n "Generating hyperparameter grid into file \"grid_workflow-XXXX.txt\"... 
 module -q load python/3.6
 
 # Run the script that generates the hyperparameter grid
-python $CANDLE_WRAPPERS/templates/scripts/generate_hyperparameter_grid.py "${args_arr[@]}" && echo "done" || echo "failed"
+python $CANDLE/wrappers/templates/scripts/generate_hyperparameter_grid.py "${args_arr[@]}" && echo "done" || echo "failed"
