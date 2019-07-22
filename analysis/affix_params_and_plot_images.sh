@@ -50,7 +50,8 @@ for dir in ${expdir}/run/*; do
     hpstr=${tmp:2:${#tmp}} #pretty=$(echo $hpstr | awk '{gsub("__"," "); gsub("-","="); print}')
 
     # For each image in the folder describing the current HP set...
-    for image in $dir/*${suffix}; do
+    #for image in $dir/*${suffix}; do
+    for image in $dir/results/*${suffix}; do
 
         # Allow for full filenames, e.g., "umap_pbmck3.png", to be set as the suffix; obtain the actual filetype
         suffix2=".$(echo "$suffix" | awk -v FS="." '{print $2}')"
@@ -59,7 +60,8 @@ for dir in ${expdir}/run/*; do
         bn=$(basename "$image" "$suffix2")
 
         # Make a descriptively named link in the linksdir folder to the image
-        ln -s "${dir}/${bn}${suffix2}" "${linksdir}/${hpstr}--${bn}${suffix2}"
+        #ln -s "${dir}/${bn}${suffix2}" "${linksdir}/${hpstr}--${bn}${suffix2}"
+        ln -s "${dir}/results/${bn}${suffix2}" "${linksdir}/${hpstr}--${bn}${suffix2}"
 
     done
 
