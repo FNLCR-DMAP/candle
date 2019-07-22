@@ -10,9 +10,9 @@
 #
 # Things to set:
 #
-#   (1) Assume new (or old) candle module is created and loaded as usual (take reference from $CANDLE_WRAPPERS/lmod_modules/{main.lua,dev.lua})
+#   (1) Assume new (or old) candle module is created and loaded as usual (take reference from /data/BIDS-HPC/public/software/checkouts/fnlcr-bids-sdsi/candle/lmod_modules/{main.lua,dev.lua})
 #   (2)
-        section=${1:-0} # set this to 1, 2, 3, etc. sequentially to build CANDLE incrementally
+        section=${1:-0} # set this to 1, 2, 3, ... , 9 sequentially to build CANDLE incrementally (START WITH 1!!!!)
 #
 
 
@@ -103,12 +103,12 @@ elif [ $section -eq 4 ]; then
     BUILD_SCRIPTS_DIR=$(cd $(dirname $0); pwd)
 
     cp -i $CANDLE/swift-t/dev/build/swift-t-settings.sh.template $CANDLE/swift-t/dev/build/swift-t-settings.sh
-    echo "(1) Confirm there aren't any significant changes between $BUILD_SCRIPTS_DIR/swift-t-settings.sh and $CANDLE/swift-t/dev/build/swift-t-settings.sh (make those files the same!)"
-    echo "(2) Confirm the settings in $CANDLE/swift-t/dev/build/swift-t-settings.sh are good"
+    echo "(1) CONFIRM there aren't any significant changes between $BUILD_SCRIPTS_DIR/swift-t-settings.sh and $CANDLE/swift-t/dev/build/swift-t-settings.sh (make those files the same!)"
+    echo "(2) CONFIRM the settings in $CANDLE/swift-t/dev/build/swift-t-settings.sh are good"
 
     cp -i $CANDLE/Supervisor/workflows/common/ext/EQ-R/eqr/settings.template.sh $CANDLE/Supervisor/workflows/common/ext/EQ-R/eqr/settings.sh
-    echo "(3) Confirm there aren't any significant changes between $BUILD_SCRIPTS_DIR/eqr_settings.sh and $CANDLE/Supervisor/workflows/common/ext/EQ-R/eqr/settings.sh (make those files the same!)"
-    echo "(4) Confirm the settings in $CANDLE/Supervisor/workflows/common/ext/EQ-R/eqr/settings.sh are good"
+    echo "(3) CONFIRM there aren't any significant changes between $BUILD_SCRIPTS_DIR/eqr_settings.sh and $CANDLE/Supervisor/workflows/common/ext/EQ-R/eqr/settings.sh (make those files the same!)"
+    echo "(4) CONFIRM the settings in $CANDLE/Supervisor/workflows/common/ext/EQ-R/eqr/settings.sh are good"
 
 #5: Build and install Swift/T
 elif [ $section -eq 5 ]; then
@@ -165,5 +165,10 @@ elif [ $section -eq 8 ]; then
 
     # Test 2: time-delayed printouts of some numbers
     swift-t -n 3 -r $BUILD_SCRIPTS_DIR $BUILD_SCRIPTS_DIR/myextension.swift
+
+#9: Ensure permissions are correct
+elif [ $section -eq 9 ]; then
+
+    chmod -R g=u,o=u-w $CANDLE $CANDLE_WRAPPERS
 
 fi
