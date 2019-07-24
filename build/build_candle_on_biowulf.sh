@@ -43,7 +43,7 @@ elif [ $section -eq 1 ]; then
     git clone https://github.com/ECP-CANDLE/Benchmarks; cd Benchmarks; git checkout fnlcr; cd ..
     git clone https://github.com/ECP-CANDLE/Candle
     git clone https://github.com/swift-lang/swift-t
-    git clone https://github.com/fnlcr-bids-sdsi/candle-wrappers
+    git clone https://github.com/fnlcr-bids-sdsi/candle
     cd ..
 
     # Create the build directories
@@ -57,7 +57,7 @@ elif [ $section -eq 1 ]; then
     ln -s checkouts/Benchmarks
     ln -s checkouts/Candle
     ln -s checkouts/swift-t
-    ln -s checkouts/candle-wrappers wrappers
+    ln -s checkouts/candle wrappers
     ln -s builds/R
     ln -s builds/swift-t-install
 
