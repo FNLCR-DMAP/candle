@@ -1,4 +1,4 @@
-# see https://cran.r-project.org/web/packages/ParamHelpers/ParamHelpers.pdfmakeNum
+# see https://cran.r-project.org/web/packages/ParamHelpers/ParamHelpers.pdf
 
 param.set <- makeParamSet(
   makeDiscreteParam("batch_size", values = c(16, 32)),

@@ -8,8 +8,21 @@ usage() {
     echo -e "  candle import-template <grid|bayesian|r>\t\t\tCopy CANDLE template files to the current directory"
     echo -e "  candle generate-grid <PYTHON-LIST-1> <PYTHON-LIST-2> ...\tGenerate a hyperparameter grid for the 'grid' search workflow"
     echo -e "  candle submit-job <SUBMISSION-SCRIPT>\t\t\t\tSubmit a CANDLE submission script"
-    echo -e "  candle aggregate-results <EXPERIMENT-DIRECTORY>\t\tOutput a CSV file of the hyperparameters and corresponding evaluation metrics to the screen"
+    echo -e "  candle aggregate-results <EXP-DIR> [<RESULT-FORMAT>]\t\tCreate a CSV file called candle_results.csv containing the hyperparameters and corresponding evaluation metrics"
     echo -e ""
+}
+
+# Since strange things occur with the command X=($@), i.e., it depends what files are present in the current directory, enter an empty directory before doing anything
+create_temp_dir() {
+    mkdir candle-temp-dir
+    cd candle-temp-dir || exit
+}
+
+# Delete the temporary directory
+remove_temp_dir() {
+    mv * ..
+    cd ..
+    rm -rf candle-temp-dir
 }
 
 # Program option to candle command
@@ -27,12 +40,6 @@ if [ ! $? -eq 0 ]; then
 # ...otherwise...
 else
 
-    # Shift the Bash script parameter indices
-    shift
-
-    # Save all the arguments to this script to an array called args_arr
-    args_arr=($@)
-
     # If no program or "help" is input, echo the correct usage
     echo $program | egrep "^$|^help$" &> /dev/null
     if [ $? -eq 0 ]; then
@@ -43,6 +50,7 @@ else
     # If templates are requested to be imported to the current directory, do so
     echo $program | egrep "^import-template$" &> /dev/null
     if [ $? -eq 0 ]; then
+        shift; args_arr=($@) # save all the command arguments to this script to an array called args_arr
         candle-import-template "${args_arr[@]}"
         exit 0
     fi
@@ -50,13 +58,17 @@ else
     # If a hyperparameter grid is requested to be generated, do so
     echo $program | egrep "^generate-grid$" &> /dev/null
     if [ $? -eq 0 ]; then
+        create_temp_dir
+        shift; args_arr=($@) # save all the command arguments to this script to an array called args_arr
         candle-generate-grid "${args_arr[@]}"
+	    remove_temp_dir
         exit 0
     fi
 
     # If a job is requested to be submitted, do so
     echo $program | egrep "^submit-job$" &> /dev/null
     if [ $? -eq 0 ]; then
+        shift; args_arr=($@) # save all the command arguments to this script to an array called args_arr
         candle-submit-job "${args_arr[@]}"
         exit 0
     fi
@@ -64,7 +76,10 @@ else
     # If CANDLE job results are requested to be aggregated, do so
     echo $program | egrep "^aggregate-results$" &> /dev/null
     if [ $? -eq 0 ]; then
+        create_temp_dir
+        shift; args_arr=($@) # save all the command arguments to this script to an array called args_arr
         candle-aggregate-results "${args_arr[@]}"
+	    remove_temp_dir
         exit 0
     fi
 

@@ -1,7 +1,4 @@
 #!/bin/bash
 
-# Input parameter experiment directory
-exp_dir=$1
-
-# Output the aggregated results to stdout
-$CANDLE/wrappers/analysis/tabulate_results.sh $exp_dir
+args_arr=($@)
+$CANDLE/wrappers/analysis/tabulate_results.sh "${args_arr[@]}"
