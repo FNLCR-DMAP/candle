@@ -1,1 +1,5 @@
-In order for Biowulf to locate the modules, at least an up-to-date COPY of this directory (or a symbolic link to it) must be located at /data/BIDS-HPC/public/software/checkouts/fnlcr-bids-hpc/modules/candle, since this is what the file /usr/local/lmod/modulefiles/candle points to
+Link paths:
+
+(1) /usr/local/lmod/modulefiles/candle
+(2) /data/BIDS-HPC/public/candle_modulefiles
+(3) /data/BIDS-HPC/public/software/distributions/candle/main/wrappers/lmod_modules

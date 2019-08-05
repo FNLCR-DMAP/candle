@@ -2,7 +2,8 @@
 
 whatis("Version: main")
 whatis("URL: https://cbiit.github.com/sdsi/candle")
-whatis("Description: Open source software for scalable hyperparameter optimization")
+ -- whatis("Description: Open source software for scalable hyperparameter optimization")
+whatis("Description: Open-source software platform providing highly scalable deep learning methodologies, including intelligent hyperparameter optimization")
 
 local app         = "candle"
 local version     = "main"
