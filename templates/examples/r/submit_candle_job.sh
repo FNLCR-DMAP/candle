@@ -5,8 +5,8 @@
 export MODEL_SCRIPT="$(pwd)/feature-reduction.R"
 export DEFAULT_PARAMS_FILE="$(pwd)/feature-reduction-R_default_params.txt"
 export WORKFLOW_SETTINGS_FILE="$(pwd)/grid_workflow-feature-reduction-R.txt"
-export NGPUS=3
-export GPU_TYPE="p100"
+export NGPUS=1
+export GPU_TYPE="k20x"
 export WALLTIME="02:20:00"
 
 export EXEC_R_MODULE="R/3.6"
