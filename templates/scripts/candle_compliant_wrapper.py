@@ -1,20 +1,35 @@
-# This file should generally follow the standard CANDLE-compliance procedure
+# This file should follow the current standard CANDLE-compliance procedure
 
 def initialize_parameters():
 
-    # Add the candle_keras library to the Python path
-    import sys, os
-    sys.path.append(os.getenv("CANDLE")+'/Candle/common')
+    # Import needed environment variables
+    import os
+    candle_dir = os.getenv("CANDLE")
+    default_model = os.getenv("DEFAULT_PARAMS_FILE")
+    dl_backend = os.getenv("DL_BACKEND") # should be either keras or pytorch
+
+    # This block is needed so that "import candle" works
+    import sys
+    sys.path.append(candle_dir+'/Benchmarks/common')
+    if dl_backend == 'keras':
+        import keras
+    elif dl_backend == 'pytorch':
+        import torch
+    else:
+        print('ERROR: Backend {} is not supported (DL_BACKEND must be exported to "keras" or "pytorch" in submission script)'.format(dl_backend))
+        exit()
+    print('Loaded {} backend'.format(dl_backend))
 
     # Instantiate the Benchmark class (the values of the prog and desc parameters don't really matter)
-    import candle_keras as candle
-    mymodel_common = candle.Benchmark(os.path.dirname(os.path.realpath(__file__)), os.getenv("DEFAULT_PARAMS_FILE"), 'keras', prog='myprogram', desc='My CANDLE example')
+    import candle
+    mymodel_common = candle.Benchmark(os.path.dirname(os.path.realpath(__file__)), default_model, dl_backend, prog='myprogram', desc='My CANDLE example')
 
     # Read the parameters (in a dictionary format) pointed to by the environment variable DEFAULT_PARAMS_FILE
-    hyperparams = candle.initialize_parameters(mymodel_common)
+    hyperparams = candle.finalize_parameters(mymodel_common)
 
     # Return this dictionary of parameters
     return(hyperparams)
+
 
 def run(hyperparams):
 
@@ -45,15 +60,19 @@ def run(hyperparams):
     with open('val_to_return.json') as infile:
         history.history = json.load(infile)
     return(history)
-    
+
+
 def main():
     hyperparams = initialize_parameters()
     run(hyperparams)
 
+
 if __name__ == '__main__':
     main()
-    try:
-        from keras import backend as K
-        K.clear_session()
-    except AttributeError:
-        pass
+    import os
+    if os.getenv("DL_BACKEND") == 'keras':
+        try:
+            from keras import backend as K
+            K.clear_session()
+        except AttributeError:
+            pass

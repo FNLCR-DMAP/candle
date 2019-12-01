@@ -3,6 +3,19 @@
 # Import relevant module
 #import json # Actually, this is done in head.py
 
+# This is Nick's JSON dumping class he gave me during the Nov 2019 hackathon
+class FromNPEncoder(json.JSONEncoder):
+    def default(self, obj):
+        import numpy as np
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return super(FromNPEncoder, self).default(obj)
+
 try: history
 except NameError:
     try: val_to_return
@@ -16,4 +29,4 @@ except NameError:
 else:
     # Write the history.history dictionary to a JSON file
     with open('val_to_return.json', 'w') as outfile:
-        json.dump(history.history, outfile)
+        json.dump(history.history, outfile, cls=FromNPEncoder)

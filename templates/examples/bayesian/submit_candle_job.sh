@@ -5,7 +5,7 @@
 # Required variables
 export MODEL_SCRIPT="$(pwd)/nt3_baseline_keras2.py"
 export DEFAULT_PARAMS_FILE="$(pwd)/nt3_default_params.txt"
-export WORKFLOW_SETTINGS_FILE="$(pwd)/bayesian_workflow-nt3_nightly.R"
+export WORKFLOW_SETTINGS_FILE="bayesian_workflow-nt3_nightly.R"
 export NGPUS=7
 export GPU_TYPE="p100" # must be p100 or v100
 export WALLTIME="00:45:00"

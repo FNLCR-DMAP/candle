@@ -11,6 +11,7 @@ export OBJ_RETURN=${OBJ_RETURN:-"val_loss"}
 export MODEL_NAME=${MODEL_NAME:-"candle_job"}
 export PPN=${PPN:-"1"} # run one MPI process (GPU process) per node on Biowulf
 export TURBINE_OUTPUT_SOFTLINK=${TURBINE_OUTPUT_SOFTLINK:-"last-exp"} # this is more descriptive than the default turbine-output symbolic link
+export DL_BACKEND=${DL_BACKEND:-"keras"} # default to keras; only other choice is pytorch
 
 # Set a proportional number of processors and amount of memory to use on the node
 if [ -z "$CPUS_PER_TASK" ]; then

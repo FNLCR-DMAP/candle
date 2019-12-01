@@ -54,30 +54,8 @@ function write_webpage() {
     echo "<li>output_dir: $output_dir</li>"
     echo "</ul>"
 
-    # Write the table of images
-    echo "<table border=1>"
-    icol=1
-    echo "  <tr>"
-    iimg=1
-    nimg=$(find "$images_dir" -type f | wc -l)
-    for image in "${images_dir}"/*; do
-        image_name=$(basename "$image")
-        echo -e "    <td align=\"center\">${image_name}\n<img src=\"images-${filter}/${image_name}\"></td>"
-        if [ "$iimg" -lt "$nimg" ]; then
-            if [ "$icol" -lt "$ncol" ]; then
-                icol=$((icol+1))
-            else
-                echo "  </tr>"
-                icol=1
-                echo "  <tr>"
-            fi
-            iimg=$((iimg+1))
-        else
-            echo "  </tr>"
-        fi
-    done
-    echo "</table>"
-
+    $(dirname $0)/write_image_table.sh $images_dir $filter $ncol
+    
     # HTML footer
     echo ""
     echo "  </body>"
@@ -92,12 +70,14 @@ verbose=$4 #0 # whether to display the ImageMajick processing details
 filters=$5 #"point cubic lanczos mitchell" # filters to try
 ncol=$6 #3 # number of columns (of width ~$size [if in pixels]) in the table of images
 output_dir=$7 #"/home/weismanal/notebook/2019-04-09" # directory in which to output the resized images and the webpages
+prefix=$8
 
 # Load the ImageMagick module
 module load ImageMagick/7.0.8
 
 # For each image in the image directory...
-for file in "${dirname}/"*"${suffix}"; do
+#for file in "${dirname}/"*"${suffix}"; do
+for file in "${dirname}/${prefix}"*"${suffix}"; do
 
     # Output status
     echo "Processing ${file}..."
@@ -120,10 +100,17 @@ for filter in $filters; do
 
     # Obtain the output image directory, create it, and move all the corresponding images to there
     images_dir="${output_dir}/images-$filter"
-    mkdir "$images_dir"
+    #if [ ! -d $images_dir ]; then
+        mkdir "$images_dir"
+    #fi
     mv "${dirname}/"*"-${filter}${suffix}" "$images_dir"
+    #echo mv "${dirname}/${prefix}"*"-${filter}${suffix}" "$images_dir"
 
     # Write the current webpage
-    write_webpage "$filter" "$images_dir" "$ncol" "$dirname" "$suffix" "$size" "$verbose" "$output_dir" > "${output_dir}/gallery-${filter}.html"
+    if [ "a$prefix" != "a" ]; then
+        $(dirname $0)/write_image_table.sh $images_dir $filter $ncol $prefix >> "${output_dir}/gallery-${filter}.html"
+    else
+        write_webpage "$filter" "$images_dir" "$ncol" "$dirname" "$suffix" "$size" "$verbose" "$output_dir" > "${output_dir}/gallery-${filter}.html"
+    fi
 
 done
