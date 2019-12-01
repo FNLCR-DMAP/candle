@@ -16,8 +16,10 @@ from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, MaxAbsScaler
 
 import sys, os
-sys.path.append(os.getenv("CANDLE")+'/Candle/common')
-import candle_keras as candle
+#sys.path.append(os.getenv("CANDLE")+'/Candle/common')
+#import candle_keras as candle
+sys.path.append(os.getenv("CANDLE")+'/Benchmarks/common')
+import candle
 
 def load_data(train_path, test_path, hyperparams):
 
@@ -64,8 +66,8 @@ url = hyperparams['data_url']
 
 #train_file = candle.get_file(file_train, url+file_train, cache_subdir='Pilot1')
 #test_file = candle.get_file(file_test, url+file_test, cache_subdir='Pilot1')
-train_file = candle.get_file(file_train, url+file_train, datadir='Pilot1')
-test_file = candle.get_file(file_test, url+file_test, datadir='Pilot1')
+train_file = candle.get_file(file_train, url+file_train, datadir=os.getenv("CANDLE")+'/Benchmarks/Data/Pilot1')
+test_file = candle.get_file(file_test, url+file_test, datadir=os.getenv("CANDLE")+'/Benchmarks/Data/Pilot1')
 
 X_train, Y_train, X_test, Y_test = load_data(train_file, test_file, hyperparams)
 
