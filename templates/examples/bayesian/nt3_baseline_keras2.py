@@ -62,8 +62,10 @@ file_train = hyperparams['train_data']
 file_test = hyperparams['test_data']
 url = hyperparams['data_url']
 
-train_file = candle.get_file(file_train, url+file_train, cache_subdir='Pilot1')
-test_file = candle.get_file(file_test, url+file_test, cache_subdir='Pilot1')
+#train_file = candle.get_file(file_train, url+file_train, cache_subdir='Pilot1')
+#test_file = candle.get_file(file_test, url+file_test, cache_subdir='Pilot1')
+train_file = candle.get_file(file_train, url+file_train, datadir='Pilot1')
+test_file = candle.get_file(file_test, url+file_test, datadir='Pilot1')
 
 X_train, Y_train, X_test, Y_test = load_data(train_file, test_file, hyperparams)
 
