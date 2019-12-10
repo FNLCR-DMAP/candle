@@ -16,7 +16,8 @@ function generate_input_files_and_run() {
 
     # Generate an "almost" version of the submission script, stored in tmp.txt
     echo "#!/bin/bash" > tmp.txt
-    extract_section "control" $submission_file | awk '{split($0, res, "="); key=res[1]; val=res[2]; print "export " toupper(key) "=" val}' >> tmp.txt
+    #extract_section "control" $submission_file | awk '{split($0, res, "="); key=res[1]; val=res[2]; print "export " toupper(key) "=" val}' >> tmp.txt
+    extract_section "control" $submission_file | awk '{split($0, res, "="); key=res[1]; val=res[2]; gsub(/ /,"",key); gsub(/^ */,"",val); print "export " toupper(key) "=" val}' >> tmp.txt
     echo "\$CANDLE/wrappers/templates/scripts/run_workflows.sh" >> tmp.txt
 
     # Extract everything but the WORKFLOW line into tmp2.txt and insert everything up to that line into the generated submission script
@@ -33,9 +34,17 @@ function generate_input_files_and_run() {
     fi
     fn_workflow_settings_file="${workflow}_workflow-GENERATED.${wsf_ext}"
 
+    # Determine whether full path to workflow settings file is supported due to current bug in CANDLE
+    if [ "a$workflow" == "abayesian" ]; then
+        path_or_not="$(pwd)/"
+    else
+        #path_or_not=""
+        path_or_not="$(pwd)/"
+    fi
+
     # Insert the other two generated input filename settings into the generated submission script
     echo "export DEFAULT_PARAMS_FILE=\"$(pwd)/${fn_default_model}\"" >> $fn_submission_script # must be a full path in order to find the default settings
-    echo "export WORKFLOW_SETTINGS_FILE=\"${fn_workflow_settings_file}\"" >> $fn_submission_script # can no longer be a full path in recent develop version of CANDLE
+    echo "export WORKFLOW_SETTINGS_FILE=\"${path_or_not}${fn_workflow_settings_file}\"" >> $fn_submission_script # can no longer be a full path in recent develop version of CANDLE
 
     # Populate the rest of the submission script and make it executable
     awk -v split_line=$split_line '{if(NR>split_line)print}' tmp2.txt >> $fn_submission_script

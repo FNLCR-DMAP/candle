@@ -5,7 +5,7 @@
 # Required variables
 export MODEL_SCRIPT="$(pwd)/mnist_mlp.py"
 export DEFAULT_PARAMS_FILE="$(pwd)/mnist_default_params.txt"
-export WORKFLOW_SETTINGS_FILE="grid_workflow-mnist.txt"
+export WORKFLOW_SETTINGS_FILE="$(pwd)/grid_workflow-mnist.txt"
 export NGPUS=2
 export GPU_TYPE="k80"
 export WALLTIME="00:20:00"
