@@ -46,6 +46,14 @@ def add_to_set(set_str_base, name, value, dtype):
     # Define the string to be formatted
     tmp_str = '{}, "{}": {}{:' + dtype + '}{}'
 
+    python_types = (False, True, None)
+    json_types = ("false", "true", "null")
+    comparisons = [value is x for x in python_types]
+    #if value in python_types:
+    if any(comparisons):
+        #value = json_types[python_types.index(value)]
+        value = json_types[comparisons.index(True)]
+
     # Return the formatted string
     return(tmp_str.format(set_str_base, name, wrap_char, value, wrap_char))
 
@@ -68,6 +76,7 @@ def make_set(variables, set_str_base, ivar, nhpset, f):
     if is_number(values[0]):
         if ( np.round(values) == values ).all():
             dtype = 'd' # integer
+            values = np.array(values, dtype='int32')
         else:
             dtype = 'f' # float
 
