@@ -4,10 +4,11 @@
   ngpus=2
   gpu_type="k80"
   walltime="00:20:00"
+  use_candle = 1
 /
 
 &default_model
-  epochs=20
+  epochs=2
   batch_size=128
   activation='relu'
   optimizer='rmsprop'

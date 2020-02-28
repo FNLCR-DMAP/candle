@@ -70,12 +70,21 @@ elif [ "x$suffix" == "xr" ]; then
 elif [ "x$suffix" == "xsh" ]; then
 
     # Create a wrapped version of the model in wrapped_model.sh
-    wrap_model "$CANDLE/wrappers/templates/scripts/head.sh" "$MODEL_SCRIPT" "$CANDLE/wrappers/templates/scripts/tail.sh" > wrapped_model.sh
+    #wrap_model "$CANDLE/wrappers/templates/scripts/head.sh" "$MODEL_SCRIPT" "$CANDLE/wrappers/templates/scripts/tail.sh" > wrapped_model.sh
+
+    # George prefers it this way
+    echo "source $CANDLE/wrappers/templates/scripts/head.sh" > wrapped_model.sh
+    echo "source $MODEL_SCRIPT" >> wrapped_model.sh
+    echo "source $CANDLE/wrappers/templates/scripts/tail.sh" >> wrapped_model.sh
 
     # Run wrapped_model.sh
-    echo "Using Bash for execution: /bin/bash"
-    script_call="/bin/bash${EXTRA_SCRIPT_ARGS:+ $EXTRA_SCRIPT_ARGS}"
-    $script_call wrapped_model.sh
+    # echo "Using Bash for execution: /bin/bash"
+    # script_call="/bin/bash${EXTRA_SCRIPT_ARGS:+ $EXTRA_SCRIPT_ARGS}"
+    # $script_call wrapped_model.sh
+
+    # George probably prefers it this way
+    echo "Using source for execution: source"
+    source wrapped_model.sh
 
 fi
 
