@@ -3,7 +3,7 @@
 outfile="val_to_return.json"
 if [ -z "$candle_val_to_return" ]
 then
-    echo "ERROR: The return value $candle_val_to_return is empty" 1>&2 
+    echo "ERROR: The return environment variable "candle_val_to_return" is empty" 1>&2 
 else
     cat > $outfile << EOM
     {

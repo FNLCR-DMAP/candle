@@ -16,5 +16,4 @@ echo $script_dir
 python $script_dir/mnist_mlp.py --batch_size="$batch_size" --epochs="$epochs" --activation="$activation" --optimizer="$optimizer"
 
 #Return a value to CANDLE 
-export CANDLE_VAL_TO_RETURN=$(cat results.txt)
-#candle_val_to_return=$(cat results.txt) # no need to export as tail.sh will be appended to this file
+candle_val_to_return=$(cat results.txt) 

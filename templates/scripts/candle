@@ -5,7 +5,7 @@ usage() {
     echo -e "Usage:"
     echo -e ""
     echo -e "  candle | candle help\t\t\t\t\t\tShow usage and exit"
-    echo -e "  candle import-template <grid|bayesian|r>\t\t\tCopy CANDLE a template to the current directory"
+    echo -e "  candle import-template <grid|bayesian|r|bash>\t\t\tCopy CANDLE a template to the current directory"
     echo -e "  candle generate-grid <PYTHON-LIST-1> <PYTHON-LIST-2> ...\tGenerate a hyperparameter grid for the 'grid' search workflow"
     echo -e "  candle submit-job <INPUT-FILE>\t\t\t\tSubmit a CANDLE job"
     echo -e "  candle aggregate-results <EXP-DIR> [<RESULT-FORMAT>]\t\tCreate a CSV file called 'candle_results.csv' containing the hyperparameters and corresponding performance metrics"
