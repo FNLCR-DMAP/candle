@@ -2,39 +2,43 @@
 
 # This script is a wrapper that prepares multiple things for use at FNLCR prior to running the workflows; it is basically a "hidden settings" file...this should be called from submit_candle_job.sh
 
+# For running the workflows themselves (and for doing the preprocessing), load the module with which Swift/T was built
+module load $DEFAULT_PYTHON_MODULE
+
+# Check the input settings, determine the sbatch settings, and export variables set in Python
+python $CANDLE/wrappers/templates/scripts/preprocess.py
+source preprocessed_vars_to_export.sh #&& rm -f preprocessed_vars_to_export.sh
+
 # Simple settings
-export WORKFLOW_TYPE=${WORKFLOW_TYPE:-$(echo $WORKFLOW_SETTINGS_FILE | awk -v FS="/" '{split($NF,arr,"_workflow-"); print(arr[1])}')}
+#export WORKFLOW_TYPE=${WORKFLOW_TYPE:-$(echo $WORKFLOW_SETTINGS_FILE | awk -v FS="/" '{split($NF,arr,"_workflow-"); print(arr[1])}')}
 export EXPERIMENTS=${EXPERIMENTS:-"$(pwd)/experiments"}
 export MODEL_PYTHON_DIR=${MODEL_PYTHON_DIR:-"$CANDLE/wrappers/templates/scripts"} # these are constants referring to the CANDLE-compliant wrapper Python script
 export MODEL_PYTHON_SCRIPT=${MODEL_PYTHON_SCRIPT:-"candle_compliant_wrapper"}
 export OBJ_RETURN=${OBJ_RETURN:-"val_loss"}
 export MODEL_NAME=${MODEL_NAME:-"candle_job"}
-export PPN=${PPN:-"1"} # run one MPI process (GPU process) per node on Biowulf
+#export PPN=${PPN:-"1"} # run one MPI process (GPU process) per node on Biowulf
 export TURBINE_OUTPUT_SOFTLINK=${TURBINE_OUTPUT_SOFTLINK:-"last-exp"} # this is more descriptive than the default turbine-output symbolic link
 export DL_BACKEND=${DL_BACKEND:-"keras"} # default to keras; only other choice is pytorch
 
-# Set a proportional number of processors and amount of memory to use on the node
-if [ -z "$CPUS_PER_TASK" ]; then
-    export CPUS_PER_TASK=14
-    if [ "x$(echo $GPU_TYPE | awk '{print tolower($1)}')" == "xk20x" ]; then
-        export CPUS_PER_TASK=16
-    fi
-fi
-if [ -z "$MEM_PER_NODE" ]; then
-    if [ "x$(echo $GPU_TYPE | awk '{print tolower($1)}')" == "xk20x" ] || [ "x$(echo $GPU_TYPE | awk '{print tolower($1)}')" == "xk80" ]; then
-        export MEM_PER_NODE="60G"
-    else
-        export MEM_PER_NODE="30G"
-    fi
-fi
+# # Set a proportional number of processors and amount of memory to use on the node
+# if [ -z "$CPUS_PER_TASK" ]; then
+#     export CPUS_PER_TASK=14
+#     if [ "x$(echo $GPU_TYPE | awk '{print tolower($1)}')" == "xk20x" ]; then
+#         export CPUS_PER_TASK=16
+#     fi
+# fi
+# if [ -z "$MEM_PER_NODE" ]; then
+#     if [ "x$(echo $GPU_TYPE | awk '{print tolower($1)}')" == "xk20x" ] || [ "x$(echo $GPU_TYPE | awk '{print tolower($1)}')" == "xk80" ]; then
+#         export MEM_PER_NODE="60G"
+#     else
+#         export MEM_PER_NODE="30G"
+#     fi
+# fi
 
 # Create the experiments directory if it doesn't already exist
 if [ ! -d $EXPERIMENTS ]; then
     mkdir -p $EXPERIMENTS && echo "Experiments directory created: $EXPERIMENTS"
 fi
-
-# For running the workflows themselves, load the module with which Swift/T was built
-module load $DEFAULT_PYTHON_MODULE
 
 # If a restart is requested for a UPF job, then overwrite the WORKFLOW_SETTINGS_FILE accordingly
 if [ -n "$RESTART_FROM_EXP" ]; then
@@ -63,12 +67,12 @@ fi
 if [ "x$WORKFLOW_TYPE" == "xgrid" ]; then # if doing the UPF workflow...
     # If a restart job is requested...
     export R_FILE=${R_FILE:-"NA"}
-    export PROCS=${PROCS:-$((NGPUS+1))}
+    #export PROCS=${PROCS:-$((NGPUS+1))}
     export WORKFLOW_TYPE="upf"
 #elif [ "x$WORKFLOW_TYPE" == "xmlrMBO" ]; then # if doing the mlrMBO workflow...
 elif [ "x$WORKFLOW_TYPE" == "xbayesian" ]; then # if doing the mlrMBO workflow...
     export R_FILE=${R_FILE:-"mlrMBO-mbo.R"}
-    export PROCS=${PROCS:-$((NGPUS+2))}
+    #export PROCS=${PROCS:-$((NGPUS+2))}
     export WORKFLOW_TYPE="mlrMBO"
 fi
 
