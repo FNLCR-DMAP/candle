@@ -21,7 +21,8 @@ function generate_input_files_and_run() {
     echo "\$CANDLE/wrappers/templates/scripts/run_workflows.sh" >> tmp.txt
 
     # Extract everything but the WORKFLOW line into tmp2.txt and insert everything up to that line into the generated submission script
-    grep -v "^export WORKFLOW=\"" tmp.txt > tmp2.txt
+    #grep -v "^export WORKFLOW=\"" tmp.txt > tmp2.txt
+    cp tmp.txt tmp2.txt
     split_line=$(awk 'BEGIN{regex="^export MODEL_SCRIPT=\""} {if($0~regex)print NR}' tmp2.txt)
     awk -v split_line=$split_line '{if(NR<=split_line)print}' tmp2.txt > $fn_submission_script
 

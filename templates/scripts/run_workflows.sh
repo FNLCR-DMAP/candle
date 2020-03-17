@@ -7,7 +7,11 @@ module load $DEFAULT_PYTHON_MODULE
 
 # Check the input settings, determine the sbatch settings, and export variables set in Python
 python $CANDLE/wrappers/templates/scripts/preprocess.py
-source preprocessed_vars_to_export.sh #&& rm -f preprocessed_vars_to_export.sh
+if [ $? -eq 0 ]; then
+    source preprocessed_vars_to_export.sh #&& rm -f preprocessed_vars_to_export.sh
+else
+    exit
+fi
 
 # Simple settings
 #export WORKFLOW_TYPE=${WORKFLOW_TYPE:-$(echo $WORKFLOW_SETTINGS_FILE | awk -v FS="/" '{split($NF,arr,"_workflow-"); print(arr[1])}')}
