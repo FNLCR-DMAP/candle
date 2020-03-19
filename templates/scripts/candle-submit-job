@@ -87,6 +87,7 @@ if [ "a$extension" == "ash" ]; then
 # ...if the submission file is .in, first generate the input files from this single input file, and then execute the generated submission script...
 elif [ "a$extension" == "ain" ]; then
     echo "Submitting the CANDLE input file \"$submission_file\"... "
+    export CANDLE_INPUT_FILE=$submission_file
     generate_input_files_and_run $submission_file && echo "done" || echo "failed"
 
 # ...otherwise, throw an error

@@ -180,10 +180,11 @@ def check_input():
             exit(1)
     elif worker_type == 'cpu':
         print('WARNING: The keyword "nthreads" is not set in &control section; setting it to 1')
-        nthreads = 1
+        nthreads = 1 # good default number of tasks for a CPU job (see task_assignment_summary.lyx)
     else:
         print('NOTE: The keyword "nthreads" has been automatically set to its default setting of 7 for GPU jobs')
-        nthreads = 7 # smallest of number of cores on node / number of GPUs on node for gpu partition
+        #nthreads = 7 # smallest of number of cores on node / number of GPUs on node for gpu partition
+        nthreads = 5 # good default number of tasks for a GPU job (see task_assignment_summary.lyx)
     print('nthreads: {}'.format(nthreads))
 
     # custom_sbatch_args
@@ -270,7 +271,7 @@ def determine_sbatch_settings(workflow, walltime, worker_type, nworkers, nthread
 
     # Contants
     ncores_cutoff = 16 # see more_cpus_tasks_etc.docx and cpus_tasks_etc.docx for justification
-    ntasks_per_core = 1 # Biowulf suggests this for MPI jobss
+    ntasks_per_core = 1 # Biowulf suggests this for MPI jobs
 
     # Variables not needed to be customized
     W = nworkers
@@ -304,6 +305,7 @@ def determine_sbatch_settings(workflow, walltime, worker_type, nworkers, nthread
         ntasks_per_node = 1
 
     # Print the sbatch command to work toward
+    print('sbatch options that should be used:')
     print_homog_job(ntasks, custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, walltime, ntasks_per_node)
 
     return(ntasks, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, ntasks_per_node)
