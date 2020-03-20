@@ -180,28 +180,35 @@ def check_input():
             exit(1)
     elif worker_type == 'cpu':
         print('WARNING: The keyword "nthreads" is not set in &control section; setting it to 1')
-        nthreads = 1 # good default number of tasks for a CPU job (see task_assignment_summary.lyx)
+        #nthreads = 1 # good default number of tasks for a CPU job (see task_assignment_summary.lyx)
+        nthreads = 1
     else:
-        print('NOTE: The keyword "nthreads" has been automatically set to its default setting of 7 for GPU jobs')
+        print('NOTE: The keyword "nthreads" has been automatically set to its default setting of 1')
         #nthreads = 7 # smallest of number of cores on node / number of GPUs on node for gpu partition
-        nthreads = 5 # good default number of tasks for a GPU job (see task_assignment_summary.lyx)
+        #nthreads = 5 # good default number of tasks for a GPU job (see task_assignment_summary.lyx)
+        nthreads = 1
     print('nthreads: {}'.format(nthreads))
 
     # custom_sbatch_args
     custom_sbatch_args = os.getenv('CUSTOM_SBATCH_ARGS', '')
     print('custom_sbatch_args: {}'.format(custom_sbatch_args))
 
-    # mem_per_worker
-    mem_per_worker = os.getenv('MEM_PER_WORKER')
-    if mem_per_worker is not None:
-        mem_per_worker = int(round(float(mem_per_worker)))
-    elif worker_type == 'cpu':
-        print('NOTE: The keyword "mem_per_worker" has been automatically set to its default setting of 7 for CPU jobs')
-        mem_per_worker = 7 # smallest of (rounded down to nearest integer) mem on node  / number of cores on node for norm partition
+    # mem_per_cpu
+    mem_per_cpu = os.getenv('MEM_PER_CPU')
+    if mem_per_cpu is not None:
+        #mem_per_worker = int(round(float(mem_per_worker)))
+        mem_per_cpu = float(mem_per_cpu)
+    # elif worker_type == 'cpu':
+    #     print('NOTE: The keyword "mem_per_worker" has been automatically set to its default setting of 7 for CPU jobs')
+    #     #mem_per_worker = 7 # smallest of (rounded down to nearest integer) mem on node  / number of cores on node for norm partition
+    #     mem_per_cpu = 7.5
     else:
-        print('NOTE: The keyword "mem_per_worker" has been automatically set to its default setting of 30 for GPU jobs')
-        mem_per_worker = 30 # smallest of (rounded down to nearest integer) mem on node / number of GPUs on node for gpu partition
-    print('mem_per_worker: {}'.format(mem_per_worker))
+        #print('NOTE: The keyword "mem_per_worker" has been automatically set to its default setting of 30 for GPU jobs')
+        print('NOTE: The keyword "mem_per_cpu" has been automatically set to its default setting of 7.5 GB')
+        #mem_per_worker = 30 # smallest of (rounded down to nearest integer) mem on node / number of GPUs on node for gpu partition
+        mem_per_cpu = 7.5
+    mem_per_cpu = int(mem_per_cpu)
+    print('mem_per_cpu: {}'.format(mem_per_cpu))
 
     # # M_gpu (GB)
     # M_gpu = int(float(os.getenv('MEM_PER_GPU', '30')))
@@ -231,10 +238,10 @@ def check_input():
 
     #return(model_script, workflow, walltime, worker_type, nworkers, ngpus, gpu_type, nthreads, custom_sbatch_args, M_gpu, M_cpu, M_swi, sbatch_mem_per_cpu, sbatch_cpus_per_task) # all variables processed above
     #return(workflow, walltime, worker_type, nworkers, nthreads, custom_sbatch_args, M_gpu, M_cpu, M_swi, sbatch_mem_per_cpu, sbatch_cpus_per_task) # just the ones we'll actually need
-    return(workflow, walltime, worker_type, nworkers, nthreads, custom_sbatch_args, mem_per_worker)
+    return(workflow, walltime, worker_type, nworkers, nthreads, custom_sbatch_args, mem_per_cpu)
 
 
-def print_homog_job(ntasks, custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, walltime, ntasks_per_node):
+def print_homog_job(ntasks, custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, walltime, ntasks_per_node, nodes):
     ntasks_part = ' --ntasks={}'.format(ntasks)
     if custom_sbatch_args == '':
         custom_sbatch_args_part = ''
@@ -242,24 +249,29 @@ def print_homog_job(ntasks, custom_sbatch_args, gres, mem_per_cpu, cpus_per_task
         custom_sbatch_args_part = ' {}'.format(custom_sbatch_args)
     if gres is not None:
         gres_part = ' --gres=gpu:{}:1'.format(gres)
+        distribution_part = ' --distribution=cyclic'
     else:
         gres_part = ''
+        distribution_part = ''
     mem_per_cpu_part = ' --mem-per-cpu={}G'.format(mem_per_cpu)
     cpus_per_task_part = ' --cpus-per-task={}'.format(cpus_per_task)
     ntasks_per_core_part = ' --ntasks-per-core={}'.format(ntasks_per_core)
     partition_part = ' --partition={}'.format(partition)
     walltime_part = ' --time={}'.format(walltime) # total run time of the job allocation
     ntasks_per_node_part = ' --ntasks-per-node={}'.format(ntasks_per_node)
-    print('{}{}{}{}{}{}{}{}{}'.format(ntasks_part, custom_sbatch_args_part, gres_part, mem_per_cpu_part, cpus_per_task_part, ntasks_per_core_part, partition_part, walltime_part, ntasks_per_node_part))
+    nodes_part = ' --nodes={}'.format(nodes)
+    print('{}{}{}{}{}{}{}{}{}{}{}'.format(ntasks_part, custom_sbatch_args_part, gres_part, distribution_part, mem_per_cpu_part, cpus_per_task_part, ntasks_per_core_part, partition_part, walltime_part, ntasks_per_node_part, nodes_part))
 
 
-def print_het_job(ntasks2, custom_sbatch_args2, gres2, mem_per_cpu2, cpus_per_task2, ntasks_per_core2, partition2, walltime2, ntasks_per_node2):
-    for ntasks, custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, walltime, ntasks_per_node in zip(ntasks2, custom_sbatch_args2, gres2, mem_per_cpu2, cpus_per_task2, ntasks_per_core2, partition2, walltime2, ntasks_per_node2):
-        print_homog_job(ntasks, custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, walltime, ntasks_per_node)
+def print_het_job(ntasks2, custom_sbatch_args2, gres2, mem_per_cpu2, cpus_per_task2, ntasks_per_core2, partition2, walltime2, ntasks_per_node2, nodes2):
+    for ntasks, custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, walltime, ntasks_per_node, nodes in zip(ntasks2, custom_sbatch_args2, gres2, mem_per_cpu2, cpus_per_task2, ntasks_per_core2, partition2, walltime2, ntasks_per_node2, nodes2):
+        print_homog_job(ntasks, custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, walltime, ntasks_per_node, nodes)
 
 
-def determine_sbatch_settings(workflow, walltime, worker_type, nworkers, nthreads, custom_sbatch_args, mem_per_worker):
-    # determine_sbatch_settings(M_gpu, M_cpu, M_swi, sbatch_mem_per_cpu, sbatch_cpus_per_task)
+def determine_sbatch_settings(workflow, walltime, worker_type, nworkers, nthreads, custom_sbatch_args, mem_per_cpu):
+    # All settings below are based on task_assignment_summary.lyx/pdf
+
+    import numpy as np
 
     # Already preprocessed parameters
     #workflow = 'grid'
@@ -275,7 +287,6 @@ def determine_sbatch_settings(workflow, walltime, worker_type, nworkers, nthread
 
     # Variables not needed to be customized
     W = nworkers
-    #T = nthreads
     if workflow == 'grid': # number of Swift/T processes S
         S = 1
     elif workflow == 'bayesian':
@@ -283,35 +294,30 @@ def determine_sbatch_settings(workflow, walltime, worker_type, nworkers, nthread
 
     # Variables to CONSIDER be customizable
     ntasks = W + S
+    T = nthreads
     if worker_type == 'cpu': # CPU-only job
-        T = nthreads
-        mem_per_cpu = mem_per_worker # for a CPU job: mem_per_cpu = MEM_PER_WORKER
-        cpus_per_task = T
-        #mem_per_cpu = M_cpu
         gres = None
-        if ((W+S)*T) <= ncores_cutoff: # single-node job
+        nodes = int(np.ceil(ntasks*T/ncores_cutoff))
+        ntasks_per_node = int(np.ceil(ntasks/nodes))
+        if nodes == 1: # single-node job
             partition = 'norm'
-            ntasks_per_node = W + S
         else: # multi-node job
             partition = 'multinode'
-            ntasks_per_node = int(ncores_cutoff/T)
     else: # GPU job
-        T_gpu = nthreads # for a GPU job: T_gpu should be customized by NTHREADS
-        mem_per_cpu = int(mem_per_worker/T_gpu) # for a GPU job: mem_per_cpu = int(MEM_PER_WORKER/T_gpu)
         partition = 'gpu'
-        cpus_per_task = T_gpu
-        #mem_per_cpu = int(M_gpu/T_gpu)
         gres = worker_type
-        ntasks_per_node = 1
+        nodes = W
+        ntasks_per_node = 1 + int(np.ceil(S/W))
+    cpus_per_task = T
 
     # Print the sbatch command to work toward
     print('sbatch options that should be used:')
-    print_homog_job(ntasks, custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, walltime, ntasks_per_node)
+    print_homog_job(ntasks, custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, walltime, ntasks_per_node, nodes)
 
-    return(ntasks, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, ntasks_per_node)
+    return(ntasks, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, ntasks_per_node, nodes)
 
 
-def export_variables(workflow, ntasks, gres, custom_sbatch_args, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, ntasks_per_node):
+def export_variables(workflow, ntasks, gres, custom_sbatch_args, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, ntasks_per_node, nodes):
 
     f = open('preprocessed_vars_to_export.sh', 'w')
 
@@ -319,9 +325,9 @@ def export_variables(workflow, ntasks, gres, custom_sbatch_args, mem_per_cpu, cp
     f.write('export WORKFLOW_TYPE={}\n'.format(workflow))
     f.write('export PROCS={}\n'.format(ntasks))
     if gres is not None:
-        f.write('export TURBINE_SBATCH_ARGS="{} --gres=gpu:{}:1 --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={}"\n'.format(custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core))
+        f.write('export TURBINE_SBATCH_ARGS="{} --gres=gpu:{}:1 --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={} --distribution=cyclic"\n'.format(custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
     else:
-        f.write('export TURBINE_SBATCH_ARGS="{} --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={}"\n'.format(custom_sbatch_args, mem_per_cpu, cpus_per_task, ntasks_per_core))
+        f.write('export TURBINE_SBATCH_ARGS="{} --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={}"\n'.format(custom_sbatch_args, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
     f.write('export QUEUE={}\n'.format(partition))
     f.write('export PPN={}\n'.format(ntasks_per_node))
 
@@ -329,10 +335,10 @@ def export_variables(workflow, ntasks, gres, custom_sbatch_args, mem_per_cpu, cp
 
 
 # Check the input settings and return the resulting required and optional variables that we'll need later (all required variables are checked but not yet all optional variables)
-workflow, walltime, worker_type, nworkers, nthreads, custom_sbatch_args, mem_per_worker = check_input()
+workflow, walltime, worker_type, nworkers, nthreads, custom_sbatch_args, mem_per_cpu = check_input()
 
 # Determine the settings for the arguments to the sbatch, turbine, etc. calls
-ntasks, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, ntasks_per_node = determine_sbatch_settings(workflow, walltime, worker_type, nworkers, nthreads, custom_sbatch_args, mem_per_worker) # new
+ntasks, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, ntasks_per_node, nodes = determine_sbatch_settings(workflow, walltime, worker_type, nworkers, nthreads, custom_sbatch_args, mem_per_cpu) # new
 
 # Export variables we'll need later to a file in order to be sourced back in in run_workflows.sh
-export_variables(workflow, ntasks, gres, custom_sbatch_args, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, ntasks_per_node)
+export_variables(workflow, ntasks, gres, custom_sbatch_args, mem_per_cpu, cpus_per_task, ntasks_per_core, partition, ntasks_per_node, nodes)
