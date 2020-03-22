@@ -101,7 +101,8 @@ def check_input():
     else:
         ngpus_is_set = False
     #if ngpus_is_set and ngpus_is_valid:
-    print('ngpus: {}'.format(ngpus))
+    if ngpus is not None:
+        print('ngpus: {}'.format(ngpus))
 
     # gpu_type
     gpu_type = os.getenv('GPU_TYPE')
@@ -119,7 +120,8 @@ def check_input():
     else:
         gpu_type_is_set = False
     #if gpu_type_is_set and gpu_type_is_valid:
-    print('gpu_type: {}'.format(gpu_type))
+    if gpu_type is not None:
+        print('gpu_type: {}'.format(gpu_type))
     ########################################################################################################################
 
 
@@ -249,10 +251,10 @@ def print_homog_job(ntasks, custom_sbatch_args, gres, mem_per_cpu, cpus_per_task
         custom_sbatch_args_part = ' {}'.format(custom_sbatch_args)
     if gres is not None:
         gres_part = ' --gres=gpu:{}:1'.format(gres)
-        distribution_part = ' --distribution=cyclic'
+        #distribution_part = ' --distribution=cyclic'
     else:
         gres_part = ''
-        distribution_part = ''
+        #distribution_part = ''
     mem_per_cpu_part = ' --mem-per-cpu={}G'.format(mem_per_cpu)
     cpus_per_task_part = ' --cpus-per-task={}'.format(cpus_per_task)
     ntasks_per_core_part = ' --ntasks-per-core={}'.format(ntasks_per_core)
@@ -260,7 +262,8 @@ def print_homog_job(ntasks, custom_sbatch_args, gres, mem_per_cpu, cpus_per_task
     walltime_part = ' --time={}'.format(walltime) # total run time of the job allocation
     ntasks_per_node_part = ' --ntasks-per-node={}'.format(ntasks_per_node)
     nodes_part = ' --nodes={}'.format(nodes)
-    print('{}{}{}{}{}{}{}{}{}{}{}'.format(ntasks_part, custom_sbatch_args_part, gres_part, distribution_part, mem_per_cpu_part, cpus_per_task_part, ntasks_per_core_part, partition_part, walltime_part, ntasks_per_node_part, nodes_part))
+    #print('{}{}{}{}{}{}{}{}{}{}{}'.format(ntasks_part, custom_sbatch_args_part, gres_part, distribution_part, mem_per_cpu_part, cpus_per_task_part, ntasks_per_core_part, partition_part, walltime_part, ntasks_per_node_part, nodes_part))
+    print('{}{}{}{}{}{}{}{}{}{}'.format(ntasks_part, custom_sbatch_args_part, gres_part, mem_per_cpu_part, cpus_per_task_part, ntasks_per_core_part, partition_part, walltime_part, ntasks_per_node_part, nodes_part))
 
 
 def print_het_job(ntasks2, custom_sbatch_args2, gres2, mem_per_cpu2, cpus_per_task2, ntasks_per_core2, partition2, walltime2, ntasks_per_node2, nodes2):
@@ -299,6 +302,11 @@ def determine_sbatch_settings(workflow, walltime, worker_type, nworkers, nthread
         gres = None
         nodes = int(np.ceil(ntasks*T/ncores_cutoff))
         ntasks_per_node = int(np.ceil(ntasks/nodes))
+
+        if (ntasks_per_node*nodes) != ntasks:
+            ntasks = ntasks_per_node * nodes # we may as well fill up all the resources we're allocating (can't do this for a GPU job, where we already ARE using all the resources [GPUs] we're allocating... remember we're reserving <nodes> GPUs)
+            print('NOTE: Requested number of workers has automatically been increased from {} to {} in order to more efficiently use Biowulf\'s resources'.format(W,ntasks-S))
+
         if nodes == 1: # single-node job
             partition = 'norm'
         else: # multi-node job
@@ -325,7 +333,9 @@ def export_variables(workflow, ntasks, gres, custom_sbatch_args, mem_per_cpu, cp
     f.write('export WORKFLOW_TYPE={}\n'.format(workflow))
     f.write('export PROCS={}\n'.format(ntasks))
     if gres is not None:
-        f.write('export TURBINE_SBATCH_ARGS="{} --gres=gpu:{}:1 --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={} --distribution=cyclic"\n'.format(custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
+        #f.write('export TURBINE_SBATCH_ARGS="{} --gres=gpu:{}:1 --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={} --distribution=cyclic"\n'.format(custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
+        f.write('export TURBINE_SBATCH_ARGS="{} --gres=gpu:{}:1 --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={}"\n'.format(custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
+        f.write('export TURBINE_LAUNCH_OPTIONS2="-n {} --map-by node"\n'.format(ntasks))
     else:
         f.write('export TURBINE_SBATCH_ARGS="{} --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={}"\n'.format(custom_sbatch_args, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
     f.write('export QUEUE={}\n'.format(partition))
