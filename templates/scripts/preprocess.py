@@ -263,7 +263,7 @@ def print_homog_job(ntasks, custom_sbatch_args, gres, mem_per_cpu, cpus_per_task
     ntasks_per_node_part = ' --ntasks-per-node={}'.format(ntasks_per_node)
     nodes_part = ' --nodes={}'.format(nodes)
     #print('{}{}{}{}{}{}{}{}{}{}{}'.format(ntasks_part, custom_sbatch_args_part, gres_part, distribution_part, mem_per_cpu_part, cpus_per_task_part, ntasks_per_core_part, partition_part, walltime_part, ntasks_per_node_part, nodes_part))
-    print('{}{}{}{}{}{}{}{}{}{}'.format(ntasks_part, custom_sbatch_args_part, gres_part, mem_per_cpu_part, cpus_per_task_part, ntasks_per_core_part, partition_part, walltime_part, ntasks_per_node_part, nodes_part))
+    print('{}{}{}{}{}{}{}{}{}{}'.format(ntasks_part, gres_part, custom_sbatch_args_part, mem_per_cpu_part, cpus_per_task_part, ntasks_per_core_part, partition_part, walltime_part, ntasks_per_node_part, nodes_part))
 
 
 def print_het_job(ntasks2, custom_sbatch_args2, gres2, mem_per_cpu2, cpus_per_task2, ntasks_per_core2, partition2, walltime2, ntasks_per_node2, nodes2):
@@ -334,8 +334,10 @@ def export_variables(workflow, ntasks, gres, custom_sbatch_args, mem_per_cpu, cp
     f.write('export PROCS={}\n'.format(ntasks))
     if gres is not None:
         #f.write('export TURBINE_SBATCH_ARGS="{} --gres=gpu:{}:1 --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={} --distribution=cyclic"\n'.format(custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
-        f.write('export TURBINE_SBATCH_ARGS="{} --gres=gpu:{}:1 --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={}"\n'.format(custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
-        f.write('export TURBINE_LAUNCH_OPTIONS2="-n {} --map-by node"\n'.format(ntasks))
+        #f.write('export TURBINE_SBATCH_ARGS="{} --gres=gpu:{}:1 --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={}"\n'.format(custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
+        f.write('export TURBINE_SBATCH_ARGS="--gres=gpu:{}:1 {} --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={}"\n'.format(gres, custom_sbatch_args, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
+        #f.write('export TURBINE_LAUNCH_OPTIONS2="-n {} --map-by node"\n'.format(ntasks))
+        f.write('export TURBINE_LAUNCH_OPTIONS="-n {} --map-by node"\n'.format(ntasks)) # should be fixed in the latest Swift/T so no need for a different variable name
     else:
         f.write('export TURBINE_SBATCH_ARGS="{} --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={}"\n'.format(custom_sbatch_args, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
     f.write('export QUEUE={}\n'.format(partition))

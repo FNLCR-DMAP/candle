@@ -17,7 +17,8 @@ function generate_input_files_and_run() {
     # Generate an "almost" version of the submission script, stored in tmp.txt
     echo "#!/bin/bash" > tmp.txt
     #extract_section "control" $submission_file | awk '{split($0, res, "="); key=res[1]; val=res[2]; print "export " toupper(key) "=" val}' >> tmp.txt
-    extract_section "control" $submission_file | awk '{split($0, res, "="); key=res[1]; val=res[2]; gsub(/ /,"",key); gsub(/^ */,"",val); print "export " toupper(key) "=" val}' >> tmp.txt
+    #extract_section "control" $submission_file | awk '{split($0, res, "="); key=res[1]; val=res[2]; gsub(/ /,"",key); gsub(/^ */,"",val); print "export " toupper(key) "=" val}' >> tmp.txt
+    extract_section "control" $submission_file | awk -v FS="=" '{loc=index($0,"="); key=$1; val=substr($0,loc+1); gsub(/ /,"",key); gsub(/^ */,"",val); print "export " toupper(key) "=" val}' >> tmp.txt
     echo "\$CANDLE/wrappers/templates/scripts/run_workflows.sh" >> tmp.txt
 
     # Extract everything but the WORKFLOW line into tmp2.txt and insert everything up to that line into the generated submission script

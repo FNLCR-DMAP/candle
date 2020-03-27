@@ -56,6 +56,9 @@ if [ "x$suffix" == "xpy" ]; then
 # Run a model written in R
 elif [ "x$suffix" == "xr" ]; then
 
+    # This has also recently caused us issues though it's unclear why they didn't occur before 3/22/20
+    unset R_LIBS
+
     # Load the default R module if a different module is not defined
     module load "${EXEC_R_MODULE:-$DEFAULT_R_MODULE}"
 

@@ -1,9 +1,9 @@
 &control
   model_script="$(pwd)/feature-reduction.R"
   workflow="grid"
-  ngpus=1
-  gpu_type="k20x"
-  walltime="02:20:00"
+  nworkers=4
+  worker_type="cpu"
+  walltime="00:20:00"
   exec_r_module="R/3.6"
   supp_r_libs="/data/BIDS-HPC/public/software/R/3.6/library"
 /

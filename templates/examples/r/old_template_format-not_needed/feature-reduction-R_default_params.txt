@@ -1,5 +1,0 @@
-[Global Params]
-mincorr = 0.20
-maxcorr = 0.80
-number_cv = 2
-extfolds=2
