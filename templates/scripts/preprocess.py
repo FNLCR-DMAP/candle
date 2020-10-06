@@ -337,7 +337,8 @@ def export_variables(workflow, ntasks, gres, custom_sbatch_args, mem_per_cpu, cp
         #f.write('export TURBINE_SBATCH_ARGS="{} --gres=gpu:{}:1 --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={}"\n'.format(custom_sbatch_args, gres, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
         f.write('export TURBINE_SBATCH_ARGS="--gres=gpu:{}:1 {} --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={}"\n'.format(gres, custom_sbatch_args, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
         #f.write('export TURBINE_LAUNCH_OPTIONS2="-n {} --map-by node"\n'.format(ntasks))
-        f.write('export TURBINE_LAUNCH_OPTIONS="-n {} --map-by node"\n'.format(ntasks)) # should be fixed in the latest Swift/T so no need for a different variable name
+        #f.write('export TURBINE_LAUNCH_OPTIONS="-n {} --map-by node"\n'.format(ntasks)) # should be fixed in the latest Swift/T so no need for a different variable name
+        f.write('export TURBINE_LAUNCH_OPTIONS="--ntasks={} --distribution=cyclic"\n'.format(ntasks)) # should be fixed in the latest Swift/T so no need for a different variable name
     else:
         f.write('export TURBINE_SBATCH_ARGS="{} --mem-per-cpu={}G --cpus-per-task={} --ntasks-per-core={} --nodes={}"\n'.format(custom_sbatch_args, mem_per_cpu, cpus_per_task, ntasks_per_core, nodes))
     f.write('export QUEUE={}\n'.format(partition))

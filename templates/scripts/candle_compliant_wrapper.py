@@ -39,7 +39,8 @@ def run(hyperparams):
             self.history = {'val_loss': [mynum], 'val_corr': [mynum], 'val_dice_coef': [mynum]}
 
     # Reformat a value that doesn't have an analogous field in the JSON format
-    hyperparams['datatype'] = str(hyperparams['datatype'])
+    #hyperparams['datatype'] = str(hyperparams['datatype'])
+    hyperparams['data_type'] = str(hyperparams['data_type'])
 
     # Write the current set of hyperparameters to a JSON file
     import json

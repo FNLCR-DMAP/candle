@@ -5,6 +5,10 @@
 # For running the workflows themselves (and for doing the preprocessing), load the module with which Swift/T was built
 module load $DEFAULT_PYTHON_MODULE
 
+
+export PYTHONHOME="/usr/local/Anaconda/envs/py3.7"
+
+
 # Check the input settings, determine the sbatch settings, and export variables set in Python
 python $CANDLE/wrappers/templates/scripts/preprocess.py
 if [ $? -eq 0 ]; then
@@ -98,5 +102,9 @@ if [ "${USE_CANDLE:-1}" -eq 1 ]; then
     fi
 # ...otherwise, run the wrapper alone, outside of CANDLE
 else
-    python "$MODEL_PYTHON_DIR/$MODEL_PYTHON_SCRIPT.py"
+    #srun $TURBINE_LAUNCH_OPTIONS --ntasks=1 python "$benchmark"
+    #python "$MODEL_PYTHON_DIR/$MODEL_PYTHON_SCRIPT.py"
+    TURBINE_LAUNCH_OPTIONS_2="--mpi=pmix --mem=0"
+    echo srun $TURBINE_LAUNCH_OPTIONS_2 --ntasks=1 python "$MODEL_PYTHON_DIR/$MODEL_PYTHON_SCRIPT.py"
+    srun $TURBINE_LAUNCH_OPTIONS_2 --ntasks=1 python "$MODEL_PYTHON_DIR/$MODEL_PYTHON_SCRIPT.py"
 fi
